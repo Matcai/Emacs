@@ -1,4 +1,3 @@
-
 ;; close menu tool bar
 (tool-bar-mode -1)
 (menu-bar-mode -1)
@@ -7,10 +6,10 @@
 
 
 ;; add slime to run lisp
-(add-to-list 'load-path "~/slime")
-(setq inferior-lisp-program "/usr/bin/sbcl")
-(require 'slime)
-(slime-setup '(slime-fancy))
+;;(add-to-list 'load-path "~/slime")
+;;(setq inferior-lisp-program "/usr/bin/sbcl")
+;;(require 'slime)
+;;(slime-setup '(slime-fancy))
 
 
 ;;add some package-archives
@@ -29,16 +28,16 @@
 
 (package-initialize)
 
-(require 'auto-complete-config)
-(ac-config-default)
+;;(require 'auto-complete-config)
+;;(ac-config-default)
 
-(global-set-key (kbd "M-DEL") 'backward-kill-word)
+;;(global-set-key (kbd "M-DEL") 'backward-kill-word)
 
 (auto-save-mode -1)
 
-(require 'linum)
+
 (linum-mode t)
 
-(require 'switch-window)
-(global-set-key (kbd "M-i") 'switch-window)
+;;(require 'switch-window)
+;;(global-set-key (kbd "M-i") 'switch-window)
 (setq auto-save-default nil)
