@@ -1,0 +1,44 @@
+
+;; close menu tool bar
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+
+
+
+;; add slime to run lisp
+(add-to-list 'load-path "~/slime")
+(setq inferior-lisp-program "/usr/bin/sbcl")
+(require 'slime)
+(slime-setup '(slime-fancy))
+
+
+;;add some package-archives
+(require 'package)
+(add-to-list 'package-archives
+	     '("elpa" . "http://tromey.com/elpa/")
+	     t)
+
+(add-to-list 'package-archives
+	     '("melpa" . "http://melpa.milkbox.net/packages/")
+	     t)
+
+(add-to-list 'package-archives 
+	     '("marmalade" . "http://marmalade-repo.org/packages/")
+	     t)
+
+(package-initialize)
+
+(require 'auto-complete-config)
+(ac-config-default)
+
+(global-set-key (kbd "M-DEL") 'backward-kill-word)
+
+(auto-save-mode -1)
+
+(require 'linum)
+(linum-mode t)
+
+(require 'switch-window)
+(global-set-key (kbd "M-i") 'switch-window)
+(setq auto-save-default nil)
