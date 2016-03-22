@@ -1,7 +1,7 @@
 ;; !-------------------------------*start*-------------------------!
 ;; close menu tool bar and some mode...
 (tool-bar-mode     -1)
-(menu-bar-mode     -1)
+;;(menu-bar-mode     -1)
 (scroll-bar-mode   -1)
 (auto-save-mode    -1)
 (global-linum-mode  t)
@@ -36,27 +36,163 @@
 (add-to-list 'package-archives 
 	     '("marmalade" . "http://marmalade-repo.org/packages/")
 	     t)
-
+(add-to-list 'package-archives
+	     '("org" . "http://orgmode.org/elpa/")
+	     t)
 (package-initialize)
 
 (require 'auto-complete)
 (global-auto-complete-mode t)
 
 ;; !----------------------*evernote configure*----------------------!
-;;(require 'evernote-mode)
-;;(setq evernote-enml-formatter-command '("w3m" "-dump" "-I" "UTF8" "-O" "UTF8"))
-;;(global-set-key "\C-cec" 'evernote-create-note)
-;;(global-set-key "\C-ceo" 'evernote-open-note)
-;;(global-set-key "\C-ces" 'evernote-search-notes)
-;;(global-set-key "\C-ceS" 'evernote-do-saved-search)
-;;(global-set-key "\C-cew" 'evernote-write-note)
-;;(global-set-key "\C-cep" 'evernote-post-region)
-;;(global-set-key "\C-ceb" 'evernote-browser)
+(add-to-list 'load-path "~/.emacs.d/elpa/evernote-mode/")
+(require 'evernote-mode)
+(setq evernote-enml-formatter-command '("w3m" "-dump" "-I" "UTF8" "-O" "UTF8"))
+(setq evernote-developer-token "S=s701:U=82942de:E=15ada4ce6b9:C=153829bb988:P=1cd:A=en-devtoken:V=2:H=0915b795eb808092a43e678d230f7ea4")
+(global-set-key "\C-cec" 'evernote-create-note)
+(global-set-key "\C-ceo" 'evernote-open-note)
+(global-set-key "\C-ces" 'evernote-search-notes)
+(global-set-key "\C-ceS" 'evernote-do-saved-search)
+(global-set-key "\C-cew" 'evernote-write-note)
+(global-set-key "\C-cep" 'evernote-post-region)
+(global-set-key "\C-ceb" 'evernote-browser)
 
 ;; !-------------------------------*end*-------------------------!
 
 ;; !-------------------------------*other*-------------------------!
 
 ;;(global-set-key (kbd "M-DEL") 'backward-kill-word)
-;;(require 'switch-window)
-;;(global-set-key (kbd "M-i") 'switch-window)
+(require 'switch-window)
+(global-set-key (kbd "M-i") 'switch-window)
+(add-hook 'org-mode-hook 'auto-complete-mode)
+(add-hook 'org-remember-before-finalize-hook 'evernote-this-org-note)
+
+(defun evernote-this-org-note(&optional arg)
+  "select note"
+  (interactive "P")
+  (beginning-of-buffer)
+  (re-search-forward "^\*.*")
+  (backward-word 1)
+  (beginning-of-line)
+  (kill-line)
+  (forward-line)
+  (evernote-post-region-4-org-mode (point) (point-max) "test")
+  )
+
+
+;;此函数将remember的内容做为evernote笔记内容,标题的remember是标题,同时,会在minibuffer中询问tag,tag以“,”间隔
+(defun evernote-post-region-4-org-mode (begin end arg)
+  "Post the region as a note"
+  (interactive "r\np")
+  (enh-command-with-auth
+   (save-excursion
+     (save-restriction
+       (narrow-to-region begin end)
+       (if (and (enutil-neq arg nil) (enutil-neq arg 1))
+
+;           (pop-to-buffer (enh-base-create-note-common (buffer-name) t t t))
+         (enh-base-create-note-common (current-kill 0) nil nil
+nil t))))))
+
+
+
+
+;; !-------------------------------*org-mode*-------------------------!
+;; org-mode
+(setq load-path (cons "~/.emacs.d/elpa/org-8.3.4/lisp" load-path))
+(add-hook 'org-mode-hook 
+(lambda () (setq truncate-lines nil)))
+(require 'org-install)
+(require 'org-latex)
+
+;; 使用xelatex一步生成PDF
+(setq org-latex-export-to-pdf-process
+'("xelatex -interaction nonstopmode %f"
+"xelatex -interaction nonstopmode %f"))
+
+;; !-------------------------------*latex-setting*-------------------------!
+
+(setq org-latex-classes
+      '(("article"
+         "
+\\documentclass[10pt,a4paper]{article}
+\\usepackage[margin=2cm]{geometry}
+\\usepackage{fontspec}
+\\setromanfont{YaHei Consolas Hybrid}
+\\geometry{a4paper,textwidth=6.5in,textheight=10in,marinparsep=8pt,marginparwidth=6in} % new adding
+\\usepackage{etoolbox}  
+\\newfontfamily\\quotefont{YaHei Consolas Hybrid}
+\\AtBeginEnvironment{quote}{\\quotefont\\small}
+
+\\setmonofont[Scale=0.9]{Courier} 
+\\XeTeXlinebreaklocale ``zh''
+\\XeTeXlinebreakskip = 0pt plus 1pt
+\\linespread{1.36}
+
+\\usepackage{hyperref}
+\\hypersetup{
+  colorlinks=true, 
+  linkcolor=[rgb]{0,0.37,0.53},
+  citecolor=[rgb]{0,0.47,0.68},
+  filecolor=[rgb]{0,0.37,0.53},
+  urlcolor=[rgb]{0,0.37,0.53},
+  pagebackref=true,
+  linktoc=all,}
+"
+         ("\\section{%s}" . "\\section*{%s}")
+         ("\\subsection{%s}" . "\\subsection*{%s}")
+         ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+         ("\\paragraph{%s}" . "\\paragraph*{%s}")
+         ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
+        ))
+
+;; [FIXME]
+;; 原本是不要讓 org 插入 hypersetup（因為 org-mode 這部份設計成沒辦法自訂，或許可以去 report 一下？）
+;; 改成自行插入，但這樣 pdfcreator 沒辦法根據 Emacs 版本插入，pdfkeyword 也會無效...幹。
+(setq org-latex-with-hyperref t)
+
+;; 把預設的 fontenc 拿掉
+;; 經過測試 XeLaTeX 輸出 PDF 時有 fontenc[T1]的話中文會無法顯示。
+;; hyperref 也拿掉，改從 classes 處就插入，原因見上面 org-latex-with-hyperref 的說明。
+(setq org-latex-default-packages-alist
+      '(("" "hyperref" nil)
+        ("AUTO" "inputenc" t)
+        ("" "fixltx2e" nil)
+        ("" "graphicx" t)
+        ("" "longtable" nil)
+        ("" "float" nil)
+        ("" "wrapfig" nil)
+        ("" "rotating" nil)
+        ("normalem" "ulem" t)
+        ("" "amsmath" t)
+        ("" "textcomp" t)
+        ("" "marvosym" t)
+        ("" "wasysym" t)
+        ("" "multicol" t)  ; 這是我另外加的，因為常需要多欄位文件版面。
+        ("" "amssymb" t)
+        "\\tolerance=1000"))
+
+;; Use XeLaTeX to export PDF in Org-mode
+(setq org-latex-pdf-process
+      '("xelatex -interaction nonstopmode -output-directory %o %f"
+        "xelatex -interaction nonstopmode -output-directory %o %f"
+        "xelatex -interaction nonstopmode -output-directory %o %f"))
+
+;; 将latex-mode 从定向到xelatex 进行处理
+(setq tex-compile-commands '(("xelatex %r")))
+(setq tex-command "xelatex")
+(setq-default TeX-engine 'xelatex)
+
+
+;;(add-hook 'org-mode-hook '(lambda()
+;;    (insert "#+LATEX_CLASS: article\n")
+;;    (insert "#+LATEX_CLASS_OPTIONS: [a4paper]\n")
+;;    (insert "#+DESCRIPTION: \n")
+;;    (insert "#+KEYWORDS: org-mode emacs24.3\n")
+;;    (insert "#+SUBTITLE:\n")
+;;    (insert "#+OPTIONS: ^:{} _:{} author:t email:t \n")
+;;    (insert "#+AUTHOR: anonymous\n")
+;;    (insert "#+EMAIL: caizhiyuannn@163.com\n")
+;;    (insert "#+DATE: \\today\n")
+;;    (insert "#+TITLE: ")
+;;))
