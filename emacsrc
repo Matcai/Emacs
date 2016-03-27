@@ -5,7 +5,7 @@
 (scroll-bar-mode   -1)
 (auto-save-mode    -1)
 (global-linum-mode  t)
-
+(load-theme 'misterioso t)
 ;; !-------------------------------*end*-------------------------!
 
 ;; !-------------------------------*start*-------------------------!
@@ -43,10 +43,25 @@
 
 (require 'auto-complete)
 (global-auto-complete-mode t)
+(require 'auto-complete-config)
+(ac-config-default)
+(require 'yasnippet)
+(yas-global-mode t)
+
+(defun my:ac-c-header-init ()
+  (require 'auto-complete-c-headers)
+  (add-to-list 'ac-sources 'ac-source-c-headers)
+  (add-to-list 'achead:include-directories '"/usr/include")
+  )
+
+(add-hook 'c-mode-hook 'my:ac-c-header-init)
+(require 'auto-complete-nxml)
+
 
 ;; !----------------------*evernote configure*----------------------!
 (add-to-list 'load-path "~/.emacs.d/elpa/evernote-mode/")
 (require 'evernote-mode)
+
 (setq evernote-enml-formatter-command '("w3m" "-dump" "-I" "UTF8" "-O" "UTF8"))
 (setq evernote-developer-token "S=s701:U=82942de:E=15ada4ce6b9:C=153829bb988:P=1cd:A=en-devtoken:V=2:H=0915b795eb808092a43e678d230f7ea4")
 (global-set-key "\C-cec" 'evernote-create-note)
@@ -183,16 +198,52 @@ nil t))))))
 (setq tex-command "xelatex")
 (setq-default TeX-engine 'xelatex)
 
+;; org-mode 的函数定义，实现自动插入个人头信息
+(defun z-org-insert-heading()
+  (goto-line 1)
+  (insert "#+LATEX_CLASS: article\n")
+  (insert "#+LATEX_CLASS_OPTIONS: [a4paper]\n")
+  (insert "#+DESCRIPTION: \n")
+  (insert "#+KEYWORDS: org-mode emacs24.3\n")
+  (insert "#+SUBTITLE:\n")
+  (insert "#+OPTIONS: ^:{} _:{} author:t email:t \n")
+  (insert "#+AUTHOR: Geeks1911\n")
+  (insert "#+EMAIL: caizhiyuannn@163.com\n")
+  (insert "#+DATE: \\today\n")
+  (insert "#+TITLE: ")
+  (interactive)
+  )
 
-;;(add-hook 'org-mode-hook '(lambda()
-;;    (insert "#+LATEX_CLASS: article\n")
-;;    (insert "#+LATEX_CLASS_OPTIONS: [a4paper]\n")
-;;    (insert "#+DESCRIPTION: \n")
-;;    (insert "#+KEYWORDS: org-mode emacs24.3\n")
-;;    (insert "#+SUBTITLE:\n")
-;;    (insert "#+OPTIONS: ^:{} _:{} author:t email:t \n")
-;;    (insert "#+AUTHOR: anonymous\n")
-;;    (insert "#+EMAIL: caizhiyuannn@163.com\n")
-;;    (insert "#+DATE: \\today\n")
-;;    (insert "#+TITLE: ")
-;;))
+(add-hook 'org-mode-hook
+	  '(lambda ()
+	     (local-set-key (kbd "C-c i h") 'z-org-insert-heading)
+	     ))
+
+
+
+;; markdown 模式的自定义函数自动插入标题注释等头信息
+(defun markdown-add-heading()
+  "auto add some head content into markdown file,'jekyll style' "
+  (goto-line 1)
+  (insert "---\n")
+  (insert "layout: post\n")
+  (insert "title: \n")
+  (insert "date: \n")
+  (insert "backgrounds:\n")
+  (insert "    - /assets/images/posts/the-desk.jpg\n")
+  (insert "thumb: /assets/images/posts/the-bridge.jpg\n")
+  (insert "categories: \n")
+  (insert "tags: \n")
+  (insert "author: \"Matthew·Cai\"\n")
+  (insert "---\n")
+  (goto-line 3)
+  (move-end-of-line)
+  (interactive)
+)
+(add-hook 'markdown-mode-hook
+	  '(lambda ()
+	    (local-set-key (kbd "C-c i h") 'markdown-add-heading)
+
+	   ))
+;; markdown 模式配置结束地方
+
