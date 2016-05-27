@@ -6,13 +6,11 @@
 (auto-save-mode    -1)
 (global-linum-mode  t)
 (load-theme 'misterioso t)
-;; !-------------------------------*end*-------------------------!
 
 ;; !-------------------------------*start*-------------------------!
 ;; global-key binding
 (global-set-key (kbd "M-m") 'set-mark-command)
 
-;; !-------------------------------*end*-------------------------!
 
 ;; !-------------------------------*start*-------------------------!
 ;; setq configure 
@@ -20,10 +18,42 @@
 (setq     auto-save-default            nil)
 (setq	  column-number-mode t)
 
-;; !-------------------------------*end*---------------------------!
+
+;; el-get 包管理插件，可以通过调用github 上的开源插件，或者MELPA 上的可用包进行安装
+;; 通过 M-x el-get-install RET package-name RET 进行安装
+;; 方便快捷
+;; el-get 上安装的包后，其他途径比如package 上有melpa 安装的相同包不能同时存在，
+;; 否则提示冲突，也就是不能安装两次同一个包
+;; 安装el-get 的方法可以通过github,emacswiki等地方进行下载的包进行安装
+;; 基本配置
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+(unless (require 'el-get nil 'noerror)
+  (with-current-buffer
+      (url-retrieve-synchronously
+       "https://raw.githubusercontent.com/dimitri/el-get/master/el-get-install.el")
+    (goto-char (point-max))
+    (eval-print-last-sexp)))
+
+;; 可选的安装方法，通过MELPA 上的包进行安装el-get
+;; (unless (require 'el-get nil 'noerror)
+;;   (require 'package)
+;;   (add-to-list 'package-archives
+;;  	       '("melpa" . "http://melpa.org/packages/")
+;;  	       )
+;;   (package-refresh-contents)
+;;   (package-initialize)
+;;   (package-install 'el-get)
+;;   (require 'el-get)
+;;   )
+
+(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
+(el-get 'sync)
+
 
 ;; !-------------------------------*start*-------------------------!
 ;;add some package-archives
+;; 添加一个常用开源网站提供的包归档
+
 (require 'package)
 (add-to-list 'package-archives
 	     '("elpa" . "http://tromey.com/elpa/")
@@ -32,7 +62,7 @@
 (add-to-list 'package-archives
 	     '("melpa" . "http://melpa.milkbox.net/packages/")
 	     t)
-
+ 
 (add-to-list 'package-archives 
 	     '("marmalade" . "http://marmalade-repo.org/packages/")
 	     t)
@@ -41,6 +71,8 @@
 	     t)
 (package-initialize)
 
+;; --------------------华丽的分割线--------------------
+
 (require 'auto-complete)
 (global-auto-complete-mode t)
 (require 'auto-complete-config)
@@ -48,6 +80,7 @@
 (require 'yasnippet)
 (yas-global-mode t)
 
+;; --------------------添加c 头文件的补全--------------------
 (defun my:ac-c-header-init ()
   (require 'auto-complete-c-headers)
   (add-to-list 'ac-sources 'ac-source-c-headers)
@@ -72,45 +105,20 @@
 (global-set-key "\C-cep" 'evernote-post-region)
 (global-set-key "\C-ceb" 'evernote-browser)
 
-;; !-------------------------------*end*-------------------------!
 
 ;; !-------------------------------*other*-------------------------!
 
 ;;(global-set-key (kbd "M-DEL") 'backward-kill-word)
-(require 'switch-window)
+
+;; 判断是否安装switch-window , 如果没有则自动安装
+(unless (require 'switch-window nil 'noerror)
+  (package-initialize)
+  (package-install 'switch-window)
+  (package-refresh-contents)
+  (require 'switch-window)
+  )
 (global-set-key (kbd "M-i") 'switch-window)
 (add-hook 'org-mode-hook 'auto-complete-mode)
-(add-hook 'org-remember-before-finalize-hook 'evernote-this-org-note)
-
-(defun evernote-this-org-note(&optional arg)
-  "select note"
-  (interactive "P")
-  (beginning-of-buffer)
-  (re-search-forward "^\*.*")
-  (backward-word 1)
-  (beginning-of-line)
-  (kill-line)
-  (forward-line)
-  (evernote-post-region-4-org-mode (point) (point-max) "test")
-  )
-
-
-;;此函数将remember的内容做为evernote笔记内容,标题的remember是标题,同时,会在minibuffer中询问tag,tag以“,”间隔
-(defun evernote-post-region-4-org-mode (begin end arg)
-  "Post the region as a note"
-  (interactive "r\np")
-  (enh-command-with-auth
-   (save-excursion
-     (save-restriction
-       (narrow-to-region begin end)
-       (if (and (enutil-neq arg nil) (enutil-neq arg 1))
-
-;           (pop-to-buffer (enh-base-create-note-common (buffer-name) t t t))
-         (enh-base-create-note-common (current-kill 0) nil nil
-nil t))))))
-
-
-
 
 ;; !-------------------------------*org-mode*-------------------------!
 ;; org-mode
@@ -119,107 +127,6 @@ nil t))))))
 (lambda () (setq truncate-lines nil)))
 (require 'org-install)
 (require 'org-latex)
-
-;; 使用xelatex一步生成PDF
-(setq org-latex-export-to-pdf-process
-'("xelatex -interaction nonstopmode %f"
-"xelatex -interaction nonstopmode %f"))
-
-;; !-------------------------------*latex-setting*-------------------------!
-
-(setq org-latex-classes
-      '(("article"
-         "
-\\documentclass[10pt,a4paper]{article}
-\\usepackage[margin=2cm]{geometry}
-\\usepackage{fontspec}
-\\setromanfont{YaHei Consolas Hybrid}
-\\geometry{a4paper,textwidth=6.5in,textheight=10in,marinparsep=8pt,marginparwidth=6in} % new adding
-\\usepackage{etoolbox}  
-\\newfontfamily\\quotefont{YaHei Consolas Hybrid}
-\\AtBeginEnvironment{quote}{\\quotefont\\small}
-
-\\setmonofont[Scale=0.9]{Courier} 
-\\XeTeXlinebreaklocale ``zh''
-\\XeTeXlinebreakskip = 0pt plus 1pt
-\\linespread{1.36}
-
-\\usepackage{hyperref}
-\\hypersetup{
-  colorlinks=true, 
-  linkcolor=[rgb]{0,0.37,0.53},
-  citecolor=[rgb]{0,0.47,0.68},
-  filecolor=[rgb]{0,0.37,0.53},
-  urlcolor=[rgb]{0,0.37,0.53},
-  pagebackref=true,
-  linktoc=all,}
-"
-         ("\\section{%s}" . "\\section*{%s}")
-         ("\\subsection{%s}" . "\\subsection*{%s}")
-         ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-         ("\\paragraph{%s}" . "\\paragraph*{%s}")
-         ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
-        ))
-
-;; [FIXME]
-;; 原本是不要讓 org 插入 hypersetup（因為 org-mode 這部份設計成沒辦法自訂，或許可以去 report 一下？）
-;; 改成自行插入，但這樣 pdfcreator 沒辦法根據 Emacs 版本插入，pdfkeyword 也會無效...幹。
-(setq org-latex-with-hyperref t)
-
-;; 把預設的 fontenc 拿掉
-;; 經過測試 XeLaTeX 輸出 PDF 時有 fontenc[T1]的話中文會無法顯示。
-;; hyperref 也拿掉，改從 classes 處就插入，原因見上面 org-latex-with-hyperref 的說明。
-(setq org-latex-default-packages-alist
-      '(("" "hyperref" nil)
-        ("AUTO" "inputenc" t)
-        ("" "fixltx2e" nil)
-        ("" "graphicx" t)
-        ("" "longtable" nil)
-        ("" "float" nil)
-        ("" "wrapfig" nil)
-        ("" "rotating" nil)
-        ("normalem" "ulem" t)
-        ("" "amsmath" t)
-        ("" "textcomp" t)
-        ("" "marvosym" t)
-        ("" "wasysym" t)
-        ("" "multicol" t)  ; 這是我另外加的，因為常需要多欄位文件版面。
-        ("" "amssymb" t)
-        "\\tolerance=1000"))
-
-;; Use XeLaTeX to export PDF in Org-mode
-(setq org-latex-pdf-process
-      '("xelatex -interaction nonstopmode -output-directory %o %f"
-        "xelatex -interaction nonstopmode -output-directory %o %f"
-        "xelatex -interaction nonstopmode -output-directory %o %f"))
-
-;; 将latex-mode 从定向到xelatex 进行处理
-(setq tex-compile-commands '(("xelatex %r")))
-(setq tex-command "xelatex")
-(setq-default TeX-engine 'xelatex)
-
-;; org-mode 的函数定义，实现自动插入个人头信息
-(defun z-org-insert-heading()
-  (goto-line 1)
-  (insert "#+LATEX_CLASS: article\n")
-  (insert "#+LATEX_CLASS_OPTIONS: [a4paper]\n")
-  (insert "#+DESCRIPTION: \n")
-  (insert "#+KEYWORDS: org-mode emacs24.3\n")
-  (insert "#+SUBTITLE:\n")
-  (insert "#+OPTIONS: ^:{} _:{} author:t email:t \n")
-  (insert "#+AUTHOR: Geeks1911\n")
-  (insert "#+EMAIL: caizhiyuannn@163.com\n")
-  (insert "#+DATE: \\today\n")
-  (insert "#+TITLE: ")
-  (interactive)
-  )
-
-(add-hook 'org-mode-hook
-	  '(lambda ()
-	     (local-set-key (kbd "C-c i h") 'z-org-insert-heading)
-	     ))
-
-
 
 ;; markdown 模式的自定义函数自动插入标题注释等头信息
 (defun markdown-add-heading()
