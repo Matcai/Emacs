@@ -34,8 +34,10 @@
       (url-retrieve-synchronously
        "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
     (goto-char (point-max))
-    (eval-print-last-sexp)))
-(require 'el-get)
+    (eval-print-last-sexp))
+  (require 'el-get)
+  )
+
 (el-get 'sync)
 
 ;; 可选的安装方法，通过MELPA 上的包进行安装el-get
