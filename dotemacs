@@ -28,6 +28,7 @@
 ;; 否则提示冲突，也就是不能安装两次同一个包
 ;; 安装el-get 的方法可以通过github,emacswiki等地方进行下载的包进行安装
 ;; 基本配置
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 (unless (require 'el-get nil 'noerror)
   (with-current-buffer
       (url-retrieve-synchronously
