@@ -11,12 +11,11 @@
 ;; !-------------------------------*start*-------------------------!
 ;; global-key binding
 (global-set-key (kbd "M-m") 'set-mark-command)
+(global-set-key (kbd "C-w") 'backward-kill-word)
+(global-set-key (kbd "C-<backspace>") 'kill-region)
 
-;; !-------------------------------*end*-------------------------!
-
-;; !-------------------------------*start*-------------------------!
 ;; setq configure 
-(setq     default-frame-alist '((width . 120) (height . 40) (left . 500) ))
+(setq     default-frame-alist '((width . 140) (height . 40) (left . 460) ))
 (set-default-font "-*-Monaco-normal-normal-normal-*-13-*-*-*-m-0-iso10646-1")
 (setq     auto-save-default            nil)
 (setq	  column-number-mode t)
@@ -37,7 +36,6 @@
     (eval-print-last-sexp))
   (require 'el-get)
   )
-
 (el-get 'sync)
 
 ;; 可选的安装方法，通过MELPA 上的包进行安装el-get
@@ -51,7 +49,6 @@
 ;;   (package-install 'el-get)
 ;;   (require 'el-get)
 ;;   )
-
 ;; !-------------------------------*start*-------------------------!
 ;;add some package-archives
 (require 'package)
@@ -97,8 +94,6 @@
 (elpy-enable)
 
 ;; jedi setup 自动补全及提示 Python 函数或语句
-;; el-get-install jedi
-(el-get-install 'jedi)
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:setup-keys t)
 (setq jedi:complete-on-dot t)
@@ -112,19 +107,6 @@
   )
 (add-hook 'c-mode-hook 'my:ac-c-header-init)
 
-;; !----------------------*evernote configure*----------------------!
-(add-to-list 'load-path "~/.emacs.d/elpa/evernote-mode/")
-(require 'evernote-mode)
-(setq evernote-enml-formatter-command '("w3m" "-dump" "-I" "UTF8" "-O" "UTF8"))
-(setq evernote-developer-token "S=s701:U=82942de:E=15ada4ce6b9:C=153829bb988:P=1cd:A=en-devtoken:V=2:H=0915b795eb808092a43e678d230f7ea4")
-(global-set-key "\C-cec" 'evernote-create-note)
-(global-set-key "\C-ceo" 'evernote-open-note)
-(global-set-key "\C-ces" 'evernote-search-notes)
-(global-set-key "\C-ceS" 'evernote-do-saved-search)
-(global-set-key "\C-cew" 'evernote-write-note)
-(global-set-key "\C-cep" 'evernote-post-region)
-(global-set-key "\C-ceb" 'evernote-browser)
-
 ;; !-------------------------------*other*-------------------------!
 
 ;;(global-set-key (kbd "M-DEL") 'backward-kill-word)
@@ -137,3 +119,24 @@
 (add-hook 'org-mode-hook 
 (lambda () (setq truncate-lines nil)))
 (require 'org-install)
+
+
+
+;; markdown hook
+(add-hook 'markdown-mode-hook 'auto-complete-mode)
+;;(global-ede-mode t)
+
+;; sr-speedbar 侧边栏的配置
+(autoinstall 'sr-speedbar)
+(setq sr-speedbar-right-side nil)
+(setq sr-speedbar-width 12)
+;;(setq dframe-update-speed t)
+(setq speedbar-show-unknown-files t)
+(add-hook 'after-init-hook '(lambda () (sr-speedbar-toggle)))
+
+;;(global-set-key (kbd "<f5>")
+;; 		(lambda ()
+;; 		  (interactive)
+;; 		  (sr-speedbar-toggle)
+;; 		  )
+;; 		)
