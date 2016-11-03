@@ -66,9 +66,17 @@
 (global-set-key (kbd "M-x") 'smex)
 (require 'company)
 
-(setq initial-frame-alist '((top . 50) (left . 480) (width . 120) (height . 50)))
-;; 配置窗口大小和位置
-(set-face-attribute (quote default) nil :height 135)		;;配置字体的大小
+
+(if (string= system-type "darwin")
+	(progn
+	 (setq initial-frame-alist '((top . 50) (left . 480) (width . 120) (height . 50)))
+	 (set-face-attribute (quote default) nil :height 135))
+  (progn
+   (setq initial-frame-alist (quote ((fullscreen . maxmized))))
+   (set-face-attribute (quote default) nil :height 130)
+   )
+  )
+
 
 
 (define-key global-map "\C-x\ o" 'switch-window)			;; 定义按键切换窗口
@@ -93,6 +101,7 @@
  '(scroll-bar-mode nil)
  '(tab-width 4)
  '(tool-bar-mode nil)
+ '(menu-bar-mode nil)
  '(yas-global-mode t))
  ;; 关闭工具栏
 
