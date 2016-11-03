@@ -18,16 +18,21 @@
   )
 
 (defvar jon/packages '(
-						 company
-						 markdown-mode
-						 markdown-mode+
-						 switch-window
-						 yasnippet
-						 evil
-						 smartparens
+					   company
+					   monokai-theme
+					   hungry-delete
+					   markdown-mode
+					   markdown-mode+
+					   switch-window
+					   yasnippet
+					   evil
+					   smex
+					   smartparens
+					   emmet-mode
 						 ) "Default packages installed")
 ;; 定义需要安装的软件包
 (setq package-selected-packages jon/packages)
+
 ;; 同步package-autoremove 需要移除的包
 (require 'cl)
 ;; 加入cl （common lisp） 语法的兼容包
@@ -49,40 +54,56 @@
   (interactive)
   (find-file "~/.emacs.d/init.el")
 )															;; 定义函数，打开初始化的配置文件
+(load-theme (quote monokai) t)
+
+
 (require (quote evil))										;; 导入vim模式的包
 (require 'smartparens-config)
-
-
+(require 'hungry-delete)
+(global-hungry-delete-mode t)								;; 全局开启删除模式
+(require 'smex)
+(smex-initialize)
+(global-set-key (kbd "M-x") 'smex)
+(require 'company)
 
 (setq initial-frame-alist '((top . 50) (left . 480) (width . 120) (height . 50)))
 ;; 配置窗口大小和位置
-(set-face-attribute (quote default) nil :height 140)		;;配置字体的大小
+(set-face-attribute (quote default) nil :height 135)		;;配置字体的大小
 
 
 (define-key global-map "\C-x\ o" 'switch-window)			;; 定义按键切换窗口
 (global-set-key (kbd "<f2>") 'open-my-init-file)			;; 绑定一个快捷键F2 快速调用初始化的配置文件
-
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(auto-save-default nil)								;; 关闭自动保存
- '(company-idle-delay 0.1)								;; 补全显示延迟
- '(company-minimum-prefix-length 2)						;; 两个字母即可补全
- '(custom-enabled-themes (quote (misterioso)) t)		;; 配置主题
- '(default-buffer-file-coding-system (quote utf-8) t)	;; 配置文件编码
- '(delete-selection-mode t)								;; 选择即删除模式
- '(global-hl-line-mode t)								;; 全局行高亮模式
- '(global-linum-mode t)									;; 全局行号模式
- '(inhibit-startup-screen t)							;; 隐藏开始屏幕显示
- '(make-backup-files nil)								;; 关闭自动备份文件
- '(scroll-bar-mode nil)									;; 关闭滚动条
- '(tab-width 4)											;; tabs 宽度
- '(tool-bar-mode nil))									;; 关闭工具栏
+ '(auto-save-default nil)
+ '(company-idle-delay 0.1)
+ '(company-minimum-prefix-length 2)
+ '(cursor-type (quote bar))
+ '(default-buffer-file-coding-system (quote utf-8) t)
+ '(delete-selection-mode t)
+ '(global-company-mode t)
+ '(global-hl-line-mode t)
+ '(global-linum-mode t)
+ '(inhibit-startup-screen t)
+ '(make-backup-files nil)
+ '(scroll-bar-mode nil)
+ '(tab-width 4)
+ '(tool-bar-mode nil)
+ '(yas-global-mode t))
+ ;; 关闭工具栏
 
 
 
 (add-hook 'emacs-lisp-mode-hook 'smartparens-mode)
 (add-hook 'emacs-lisp-mode-hook 'show-paren-mode)			;; 添加模式在编辑lisp 的时候成对高亮括号
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
