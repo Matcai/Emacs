@@ -50,7 +50,7 @@
       (package-install pkg))))
 ;; 如果软件包没有安装则自动安装。
 
-(defun open-my-init-file() 
+(defun open-my-init-file()
   (interactive)
   (find-file "~/.emacs.d/init.el")
 )															;; 定义函数，打开初始化的配置文件
