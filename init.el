@@ -72,7 +72,7 @@
 	 (setq initial-frame-alist '((top . 50) (left . 480) (width . 120) (height . 50)))
 	 (set-face-attribute (quote default) nil :height 135))
   (progn
-   (setq initial-frame-alist (quote ((fullscreen . maxmized))))
+   (setq initial-frame-alist (quote ((fullscreen . maximized))))
    (set-face-attribute (quote default) nil :height 130)
    )
   )
