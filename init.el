@@ -1,215 +1,35 @@
-;;  __        __             __   ___
-;; |__)  /\  /  ` |__/  /\  / _` |__
-;; |    /~~\ \__, |  \ /~~\ \__> |___
-;;                      __   ___        ___      ___
-;; |\/|  /\  |\ |  /\  / _` |__   |\/| |__  |\ |  |
-;; |  | /~~\ | \| /~~\ \__> |___  |  | |___ | \|  |
-
-
-(when (>= emacs-major-version 24)
-  (require 'package)
-  (setq package-archives '(
-						   ("gnu" . "http://elpa.zilongshanren.com/gnu/")
-						   ("melpa" . "http://elpa.zilongshanren.com/melpa/")))
-  ;; 采用国内的镜像源
-  (package-initialize)
-  ;; (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-  ;; add-to-list 添加一个列表内容到package-archives列表中，"t" 表示在后面附加的形式，默认添加在指定列表的前面
-  )
-
-(defvar jon/packages '(
-					   company
-					   monokai-theme
-					   hungry-delete
-					   markdown-mode
-					   markdown-mode+
-					   switch-window
-					   yasnippet
-					   evil
-					   smex
-					   smartparens
-					   emmet-mode
-					   exec-path-from-shell
-					   ox-latex-chinese
-					   ) "Default packages installed")
-;; 定义需要安装的软件包
-(setq package-selected-packages jon/packages)
-
 ;; 同步package-autoremove 需要移除的包
-(require 'cl)
-;; 加入cl （common lisp） 语法的兼容包
 
-(defun jon/packages-installed-p ()
-  (dolist (pkg jon/packages t)
-    (if (not (package-installed-p pkg)) (return nil))))
-;; 定义函数用于判断软件包是否安装
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+(add-to-list 'load-path "~/.emacs.d/austin/" t)
 
-(unless (jon/packages-installed-p)
-  (message "%s" "Refreshing package database...")
-  (package-refresh-contents)
-  (dolist (pkg jon/packages)
-    (when (not (package-installed-p pkg))
-      (package-install pkg))))
-;; 如果软件包没有安装则自动安装。
+(require 'at-packages)
+(require 'at-latex)
+(require 'at-function)										;; 自定义的函数
 
-(defun open-my-init-file()
-  (interactive)
-  (find-file "~/.emacs.d/init.el")
-  )															;; 定义函数，打开初始化的配置文件
-(load-theme (quote monokai) t)
-
-
-(require (quote evil))										;; 导入vim模式的包
+;; 导入vim模式的包
+(require (quote evil))										
 (require 'smartparens-config)
 (require 'hungry-delete)
-(global-hungry-delete-mode t)								;; 全局开启删除模式
 (require 'smex)
-(smex-initialize)
-(global-set-key (kbd "M-x") 'smex)
 (require 'company)
-(require 'ox-latex-chinese)
-(oxlc/toggle-ox-latex-chinese t)
 
-(when (memq window-system '(mac ns))
-  (exec-path-from-shell-initialize))
+(require 'at-setting)
+(require 'at-keybinding)
 
-(if (string= system-type "darwin")
-	(progn
-	  (setq initial-frame-alist '((top . 50) (left . 480) (width . 120) (height . 50)))
-	  (set-face-attribute (quote default) nil :height 135))
-  (progn
-   (setq initial-frame-alist (quote ((fullscreen . maximized))))
-   (set-face-attribute (quote default) nil :height 130)
-   )
-  )
+;;(require 'cl)
+;; 加入cl （common lisp） 语法的兼容包
 
+;;(load-theme (quote monokai) t)
+(load-theme (quote misterioso) t)
 
-(defun indent-buffer()
-  "Indent the currently visited buffer"
-  (interactive)
-  (indent-region (point-min) (point-max))
-  )
+;;(require 'ox-latex-chinese)
+;;(oxlc/toggle-ox-latex-chinese t)
 
-(defun indent-region-or-buffer()
-  "Indent a region if selected, otherwise the whole buffer. "
-  (interactive)
-  (save-excursion
-	(if (region-active-p)
-		(progn
-		  (indent-region (region-beginning) (region-end))
-		  (message "Indent selected region."))
-	  (progn
-		(indent-buffer)
-		(message "Indent buffer.")))))
+;; (setq exec-path (append exec-path '("/usr/local/texlive/2016/bin/x86_64-darwin")))
+;; (add-to-list 'exec-path "/usr/local/texlive/2016/bin/x86_64-darwin/" t)
 
-
-(define-key global-map (kbd "C-c <tab>") 'indent-region-or-buffer)
-(define-key global-map "\C-x\ o" 'switch-window)			;; 定义按键切换窗口
-(global-set-key (kbd "<f2>") 'open-my-init-file)			;; 绑定一个快捷键F2 快速调用初始化的配置文件
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(auto-save-default nil)
- '(company-idle-delay 0.1)
- '(company-minimum-prefix-length 2)
- '(cursor-type (quote bar))
- '(default-buffer-file-coding-system (quote utf-8) t)
- '(delete-selection-mode t)
- '(global-company-mode t)
- '(global-hl-line-mode t)
- '(global-linum-mode t)
- '(inhibit-startup-screen t)
- '(make-backup-files nil)
- '(menu-bar-mode nil)
- '(org-latex-pdf-process
-   (quote
-	("xelatex -interaction nonstopmode -output-directory %o %f" "xelatex -interaction nonstopmode -output-directory %o %f" "xelatex -interaction nonstopmode -output-directory %o %f")))
- '(package-selected-packages
-   (quote
-	(exec-path-from-shell company monokai-theme hungry-delete markdown-mode markdown-mode+ switch-window yasnippet evil smex smartparens emmet-mode)))
- '(scroll-bar-mode nil)
- '(tab-width 4)
- '(tool-bar-mode nil)
- '(yas-global-mode t))
-;; 关闭工具栏
-
-
-
-(add-hook 'emacs-lisp-mode-hook 'smartparens-mode)
-(add-hook 'emacs-lisp-mode-hook 'show-paren-mode)			;; 添加模式在编辑lisp 的时候成对高亮括号
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-
-(setq org-latex-create-formula-image-program 'imagemagick)
-
-;; Auto generated by `oxlc/insert-configure-template' of
-;; (ox-latex-chinese)[https://github.com/tumashu/ox-latex-chinese]
-(setq org-latex-default-class "ctexart")
-(setq org-latex-classes
- (quote 
-(("ctexart" "\\documentclass[fontset=none,UTF8,a4paper,zihao=-4]{ctexart}"
-  ("\\section{%s}" . "\\section*{%s}")
-  ("\\subsection{%s}" . "\\subsection*{%s}")
-  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-  ("\\paragraph{%s}" . "\\paragraph*{%s}")
-  ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))
- ("ctexrep" "\\documentclass[fontset=none,UTF8,a4paper,zihao=-4]{ctexrep}"
-  ("\\part{%s}" . "\\part*{%s}")
-  ("\\chapter{%s}" . "\\chapter*{%s}")
-  ("\\section{%s}" . "\\section*{%s}")
-  ("\\subsection{%s}" . "\\subsection*{%s}")
-  ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
- ("ctexbook" "\\documentclass[fontset=none,UTF8,a4paper,zihao=-4]{ctexbook}"
-  ("\\part{%s}" . "\\part*{%s}")
-  ("\\chapter{%s}" . "\\chapter*{%s}")
-  ("\\section{%s}" . "\\section*{%s}")
-  ("\\subsection{%s}" . "\\subsection*{%s}")
-  ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
- ("beamer" "\\documentclass{beamer}
-               \\usepackage[fontset=none,UTF8,a4paper,zihao=-4]{ctex}"
-  org-beamer-sectioning))
-))
-(setq org-latex-default-packages-alist
- (quote 
-(("" "fixltx2e" nil)
- ("" "graphicx" t)
- ("" "longtable" nil)
- ("" "float" nil)
- ("" "wrapfig" nil)
- ("" "rotating" nil)
- ("" "amsmath" t)
- ("" "textcomp" t)
- ("" "marvosym" t)
- ("" "wasysym" t)
- ("" "amssymb" t)
- ("" "hyperref" nil)
- "\\tolerance=1000")
-))
-;; (setq org-latex-pdf-process
-;;  (quote 
-;; ("xelatex -interaction nonstopmode -output-directory %o %f" "bibtex %b"
-;;  "xelatex -interaction nonstopmode -output-directory %o %f"
-;;  "xelatex -interaction nonstopmode -output-directory %o %f")
-;; ))
-(setq org-latex-packages-alist
- (quote 
-("
-\\setmainfont{Times New Roman}
-\\setCJKmainfont[ItalicFont={STKaiti}]{STSong}
-" "
-%%% 默认使用的latex宏包 %%%
-\\usepackage{tikz}
-\\usepackage{CJKulem}
-\\usepackage{graphicx}
-%%% 设置页面边距 %%%
-\\usepackage[top=2.54cm, bottom=2.54cm, left=3.17cm, right=3.17cm]{geometry} %")
-))
-;; The end of auto generated code.
