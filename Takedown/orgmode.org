@@ -1,0 +1,671 @@
+#+TITLE: org 模式记录笔记
+#+AUTHOR: 偷你影子的人
+#+DATE: <2016-11-29 Tue>
+#+OPTIONS: texht:t toc:t H:2
+#+LATEX_CLASS: ctexart
+#+STARTUP: content
+#+TODO: TODO(t) DOING(i) | DONE(d)
+
+\newpage
+* Org Document Structure
+** Outlines (大纲) 显示及隐藏的快捷键
+  大纲模式可以通过快捷键来隐藏org文本的内容，它会根据标题来进行分类隐藏。\\
+  用于增强可读性。
+
+  - <TAB> 子树循环显示，将会循环显示当前子树之中的状态
+    
+    #+BEGIN_SRC ditaa :file Outlines-1.png :cmdline -r 
+                 +-> FOLDED ---> CHILDREN  ---> SUBTREE  ---+
+                 |                                          |
+                 +------------------------------------------+
+    #+END_SRC
+    
+  - S-<TAB> and C-u <TAB> 全局循环
+    
+    #+BEGIN_SRC ditaa :file Outlines-2.png :cmdline -r 
+                 +-> OVERVIEW ---> CONTENTS---> SHOW ALL ---+
+                 |                                          |
+                 +------------------------------------------+    
+    #+END_SRC
+  - C-u C-u C-u <TAB> 将会显示所有的隐藏内容
+  - org文件默认使用全局状态为'OVERVIEW',可以通过'#+STARTUP: content' 来配置全局默认显示的方式
+    
+** Motion (文章的光标的快捷移动)
+   - C-c C-n (org-next-visible-heading) 下一个标题
+   - C-c C-p (org-previous-visible-heading) 上一个标题
+   - C-c C-f (org-forward-same-level) 下一个相同级别的标题
+   - C-c C-b (org-backward-same-level) 上一个相同级别的标题
+   - C-c C-u (outline-up-heading) 返回高级别的标题
+   - C-c C-j (org-goto)  跳转到其它位置而不更改当前大纲的可见性
+** Structure Editing (结构编辑)
+   - M-<RET> (org-insert-heading) 
+     在当前插入相同级别的标题,如果当前光标是列表则插入列表. 
+     当该命令在行中间执行,则会分离前后的文本,后面的文本将成为新标题的内容.
+     如果不想分割文本，则可以通过自定义变量‘org-M-RET-may-split-line’更改
+     
+   - C-<RET> (org-insert-heading-respect-content)
+n     在当前子树最后插入一个新的标题
+     
+   - M-S-<RET> (org-insert-todo-heading)
+     在当前插入相同级别的TODO 任务计划
+     
+   - C-S-<RET> (org-insert-todo-heading-respect-content)
+     在当前标题插入一个相同级别的TODO条目，像C-RET那样在当前子树最后插入
+     
+   - <TAB> 切换合适的标题级别，比如* 通过<TAB> 可以切换为** 级别
+     
+   - M-<left>/<right> (org-do-promote/org-do-demote)
+     提升/降级 当前标题的级别
+     
+   - M-S-<left>/<right> (org-promote-subtree/org-demote-subtree)
+     提升/降级当前子树的级别
+     
+   - M-S-<up>/<down> (org-move-subtree-up/org-move-subtree-down)
+     移动子树到合适位置
+
+   - M-h (org-mark-element)
+     根据标题或列表来选择标记
+
+   - C-c @ (org-mark-subtree)
+     标记子树，整个子树的内容都会被标记
+
+   - C-c C-x C-w (org-cut-subtree)
+     剪切整个子树的内容
+
+   - C-c C-x C-y (org-paste-subtree)
+     粘贴保存在kill ring里面拷贝或剪切过来的内容
+     
+   - C-c C-w (org-refile)
+     复制标题的所有条目或移动到指定标题
+     
+   - C-x n s/b/w (org-narrow-to-subtree/org-narrow-to-block/widen)
+     缩小/扩大当前子树（缩小将仅显示当前标题内的内容） \\
+     C-x n b 表示显示所有被隐藏的内容
+
+   - C-x * (org-toggle-heading)
+     将普通的行或列表转换成标题
+          
+** Sparse Trees (筛选子树)稀树
+   Sparse Trees 功能将显示通过筛选子树所有条目存在的内容，如果筛选的内容没有在该树中，则将隐藏该树以提升更好的可读性。
+   - C-c / (org-sparse-tree)
+     开启稀树功能的prefix Command ，将提示拓展功能
+   - C-c / r  or C-c / / (org-error)
+     通过regexp 正则表达式匹配需要显示的内容，C-c C-c 可以取消匹配的高亮显示。
+   - M-g n or M-g M-n (next-error)
+     跳转到下一个匹配的稀树内容
+   - M-g p or M-g M-p (previous-error)
+     跳转到上一个匹配的稀树内容
+     
+** Plain Lists (普通列表)
+   在一个大纲树条目中，列表可以提供附加的结构。也可以提供一个带有checkboxes（选择框）的列表 \\
+   Org 支持有序列表、无序列表 和列表的注释 \\
+   *无序列表通过‘-’、‘+’、‘*’ 加空格来表示* \\
+   *有序列表通过‘1.’ 或 ‘1)’ 加空格来表示* \\
+   相同级别的列表必须具有相同的缩进！
+   #+BEGIN_SRC org
+     ,** Lord of the Rings
+        My favorite scenes are (in this order)
+        1. The attack of the Rohirrim
+        2. Eowyn's fight with the witch king
+           + this was already my facorite scene in the book
+           + I really like Miranda Otto.
+        Important actors in this film are:
+        - Elijah Wood :: He plays Frodo
+        - Sean Astin :: He plays Sam, Frodo's friend.
+   #+END_SRC
+
+   - <TAB>  (org-cycle)
+     列表可以像标题那样折叠子列表
+   - M-<RET> (org-insert-heading)
+     在当前级别插入一个新的列表，如果光标是在中间将分割左右的字符成立新的列表。
+   - M-S-<RET> 插入一个带checkbox的列表，
+   - M-S-<up>/<down> 移动列表到需要的位置， 如果列表是有序列表，则自动更新列表序号
+   - M-<left>/<right> 升级/降级当前列表的级别
+   - M-S-<left>/<right> 升级/降级当前列表的级别
+   - C-c C-c 如果是带checkbox 的列表， 将更新checkbox 的状态。也可以缩进整个列表的一致性
+   - C-c -  or S-left/right
+     切换整个列表条目的类型（‘-’，‘+’，‘1.’，‘1)’）
+   - C-c ^ 根据提示对列表进行排序
+
+** Footnotes （脚注）
+   #+BEGIN_SRC org
+     The Org homepage[fn:1] now looks a lot better than it used to.
+     ...
+     [fn:1] The link is: http://orgmode.org
+
+   #+END_SRC
+   
+   - C-c C-x f 创建一个脚注并添加引用
+   - C-c C-c  在脚注和引用之间移动
+\newpage
+
+* Tables
+** Built-in table editor
+  Org 带有一个快速直观的表格编辑器，calc包支持电子表格的计算 \\
+  以‘|’作为表格的分隔符。like this：
+
+  #+BEGIN_SRC org
+
+      | Name  | Phone | Age |
+      |-------+-------+-----|
+      | Peter |  1234 |  17 |
+      | Anna  |  4321 |  25 |
+
+  #+END_SRC
+
+  - C-c | (org-table-create-or-convert-from-region)
+    根据提示输入表格的大小来创建一个表格
+    
+  - C-c C-c (org-table-align)
+    重新对齐表格但不移动关标
+    
+  - C-c SPC (org-table-blank-field)
+    清除一个单元格的内容
+    
+  - <TAB> (org-table-next-field)
+    重新对齐表格并移动到下一个字段，如果有必要则创建一个新行
+    
+  - S-<TAB> (org-table-previous-field)
+    重新对齐表格并移动到上一个字段
+    
+  - <RET> (org-table-next-row)
+    重新对齐表格并移动到下一行，如果有必要则创建一个新行
+
+  - M-a/e (org-table-beginning-of-field/org-table-end-of-field)
+    移动光标到上一个或下一个单元格(org-version 8.2.10)
+    
+*** Column and Row Editing    
+
+  - M-<left>/<right> (org-table-move-column-left/right)
+    左右移动当前列
+    
+  - M-S-<left> (org-table-delete-column)
+    删除当前列
+    
+  - M-S-<right> (org-table-insert-column)
+    在光标的左侧插入新的列
+    
+  - M-<up>/<down> (org-table-move-row-up/down)
+    上下移动当前行
+    
+  - M-S-<up> (org-table-kill-row)
+    删除当前行或水平线
+    
+  - M-S-<down> (org-table-insert-row)
+    在当前行的上方插入新行，如果使用前缀命令，则在当前行的下方插入新行
+    
+  - C-c - (org-table-insert-hline)
+    在当前行下方插入水平线，如果使用前缀命令，则在当前行的上方插入水平线
+    
+  - C-c <RET> (org-table-hline-and-move)
+    在当前行插入水平线并将光标移动到该行下面的行
+    
+  - C-c ^ (org-table-sort-lines)
+    将表格行进行排序
+
+*** Regions
+    
+  - C-c C-x M-w (org-table-copy-region)
+    在表格内复制当前光标所在的单元格内容
+    
+  - C-c C-x C-w (org-table-cut-region)
+    在表格内剪切当前光标所在的单元格内容
+    
+  - C-c C-x C-y (org-table-paste-rectangle)
+    粘贴region内容到单元格
+
+*** Calculations
+
+    - C-c + (org-table-sum)
+      计算当前单元格整列的数字和，结果可以通过C-y 插入
+    - S-<RET>  (org-table-copy-down)
+      如果当前单元格是空的话， 将会复制上一个单元格的非空字段,如果上一个单元格是数字，则将会累加1
+
+*** Miscellaneous (其它杂项)
+
+    - C-c ` (org-table-edit-field)
+      调用一个独立的窗口来编辑当前的单元格内容
+    - M-x org-table-import RET
+      从文件中导入一个表格
+
+** Column width and alignment（列宽和对齐）
+   列宽是通过表格编辑器自动确定的，但是有时候一个单元格的内容太长时，可以通过自定义列宽进行合适的缩进提高可视性。
+   例如：
+   #+BEGIN_SRC org
+     |---+------------------------------|
+     |   |                              |
+     | 1 | one                          |
+     | 2 | two                          | 
+     | 3 | this is a long chunk of text |
+     | 4 | four                         |
+     |---+------------------------------|
+
+     通过指定列宽来进行合适的缩进
+
+     |---+--------|
+     |   | <6>    |
+     | 1 | one    |
+     | 2 | two    |
+     | 3 | this=> |
+     | 4 | four   |
+     |---+--------|
+
+   #+END_SRC
+
+** Column groups (列组)
+   当Org文件导出文件中的表格默认没有垂直线，因为这样视觉更令人满意。 \\
+   有时候会把多列的单元格合并为一组（列组），它就会通过垂直线来区别开来。 \\
+   使用方法是只有一列的时候通过‘/’ 来标识，两列以上通过‘<’和'>' 来包含表示。 \\
+   '<>'之间的列都归为一个列组。例如：
+   #+BEGIN_SRC org
+     | N | N^2 | N^3 | N^4 | ~sqrt(n)~ | ~sqrt[4](N)~ |
+     |---+-----+-----+-----+-----------+--------------|
+     | / |   < |     |   > |         < |            > |
+     | 1 |   1 |   1 |   1 |         1 |            1 |
+     | 2 |   4 |   8 |  16 | 1.4142136 |    1.1892071 |
+     | 3 |   9 |  27 |  81 | 1.7320508 |    1.3160740 |
+     |---+-----+-----+-----+-----------+--------------|
+     ,#+TBLFM: $2=$1^2::$3=$1^3::$4=$1^4::$5=sqrt($1)::$6=sqrt(sqrt(($1)))
+
+   #+END_SRC
+   
+** The Spreadsheet (电子表格)
+*** References (参考)
+**** Field Reference (字段参考)
+     表格单元格的坐标定位通过'@row$column'来表示，row表示行，column表示列。 \\
+     通过C-c ? 命令可以查看当前光标所在位置的单元格的坐标信息； \\
+     通过C-c } 命令可以开启自动显示表格的坐标信息在Org文件中。 \\
+     (org-table-toggle-coordinate-overlays)
+     
+     - 列的坐标可以使用绝对的坐标来标识，像"$1, $2, $3 ... $N"
+     - 可以使用相对的坐标,如："$-1,$+2"，以要计算的列作为坐标进行加减。
+     - "$< $>" 分别表示第一列和最后一列
+     - "$>>" 表示右侧算起的第二列，"$>>>" 表示右侧第三列等
+     - "@I" 表示第一行，"@II" 表示第二行等，以要计算的行作为坐标加减
+       
+**** Range Reference (范围参考)
+     单元格坐标的定位还可以支持指定一定的范围进行标识。在范围之间加".."即可，例如
+     #+BEGIN_SRC org
+            $1..$3        第一到第三列
+            $P..$Q        第P列到第Q列，大写英文A为第一列，以此类推
+            $<<<..$>>     从开始的第三列到最后第二列
+            @2$1..@4$3    6 fields between these two fields (同 A2..C4，一个矩阵范围)
+            @-1$-2..@-1   3 fields in the row above, starting from 2 columns on the left
+            @I..II        between first and second hline, short for @I..@II
+     #+END_SRC
+     
+**** Field coordinates in formulas
+     电子表格的计算公式可以结合Lisp公式来进行计算，@# 表示每一行，$# 表示每一列。
+     - if(@# % 2, $#, string(""))
+       如果为奇数行，则插入$#（列数）；否则插入空
+     - $2 = '(identity remote(FOO, @@#$1))
+       将一个名为FOO 的表格的第一列每一行的内容复制到当前表的第二列
+     - @3 = 2 * remote(FOO, @1$$#)
+       将一个名为FOO 的表格的第一行的所有列乘以2复制到当前表格的第三行
+
+**** Named Reference (关键字引用)
+     通过定义常量，可以通过'$name' 的方式进行引用，例如：
+     #+BEGIN_SRC org
+       定义常量
+       ,#+CONSTANTS: c=2992341. pi=3.1415926 eps=2.4e-6     
+     #+END_SRC
+     
+**** Remote Reference (远程调用)
+     表格还可以通过在当前文件中调用另一个文件的表格内容，语法为：
+     #+BEGIN_SRC org
+       ,#+NAME: org-table.org
+       通过NAME来定义需要远程调用的文件名，REF表示一个绝对或者一个范围的坐标，\\
+       例如@3$3 or $somename
+
+       remote(NAME-OR-ID, REF)
+     #+END_SRC
+     
+*** Formula syntax for Calc (电子表格计算的公式语法表示)
+    - p20 
+      设置计算精度为20位
+    - n3, s3, e2, f4
+      分别表示用正常，科学计算，工程计算，以及固定格式的方式返回需要计算的值
+    - D, R (Degree, radian)
+      分别表示角度和弧度
+    - F, S (Fraction, symbolic)
+      分别表示分数和符号来用于计算
+    - T, t 
+      以时间的格式去计算
+    - E
+      表示空的字段
+    - N
+      将所有字段解释为数字，如果不是数字，则使用0来代替
+    - L (Literal)
+      文字
+    #+BEGIN_SRC org
+           $1+$2                汇总第一列和第二列
+           $1+$2;%.2f           同上，格式化的结果为浮点数，保留两位
+           exp($2)+exp($1)      使用数学函数，exp指数
+           $0;%.1f              Reformat current cell to 1 decimal
+           ($3-32)*5/9          Degrees F -> C conversion
+           $c/$1/$cm            Hz -> cm conversion, using constants.el
+           tan($1);Dp3s1        Compute in degrees, precision 3, display SCI 1
+           sin($1);Dp3%.1e      Same, but use printf specifier for display
+           taylor($3,x=7,2)     Taylor series of $3, at x=7, second degree
+    #+END_SRC
+    
+*** Formula syntax for Lisp (使用Lisp语法进行参与电子表格计算)
+    如果Calc 包提供的计算能力不够， 可以使用Lisp 来进行拓展。 \\
+    公式以左撇号跟一个左括号则认识是lisp语法的开始。例如
+    
+    - '(concat (substring $1 1 2) (substring $1 0 1) (substring $1  2))
+    - '(+ $1 $2);N
+    - '(apply '+ '($1..$4));N
+
+*** Durations and time values (持续时间和时间值)
+    如果需要计算时间，通过T标记来表示，例如：
+    #+BEGIN_SRC org
+      |  Task 1 |   Task 2 |    Total |
+      |---------+----------+----------|
+      |    2:12 |     1:47 | 03:59:00 |
+      | 3:02:20 | -2:07:00 |     0.92 |
+      ,#+TBLFM: @2$3=$1+$2;T::@3$3=$1+$2;t
+    #+END_SRC
+
+*** Field and range formulas
+    - C-u C-c = (org-table-eval-formula)
+      打开一个独立的窗口来输入当前单元格的格式
+    - “:=” 在单元格:=加计算表达式进行计算
+    - @1$2..@4$3=
+      矩阵计算，指定一个范围
+    - $name=
+      通过命名的方式使用表达式
+*** Lookup Functions (查找函数，用于表格数值得搜索)
+    
+    - (org-lookup-first VAL S-LIST R-LIST &optional PREDICATE)
+    - (org-lookup-last VAL S-LIST R-LIST &optional PREDICATE)
+    - (org-lookup-all VAL S-LIST R-LIST &optional PREDICATE)
+      
+      VAL表示对表格中单元格的定位，根据VAL给定的值或坐标，搜索表格S-LIST 中的值； \\
+      一旦匹配，则返回R-LIST 中对应的值，例如：
+      #+BEGIN_SRC org
+        ,#+TBLNAME: rates
+        | currency        | abbreviation | euros |
+        |-----------------+--------------+-------|
+        | eur             | eur          |     1 |
+        | Norwegian krone | nok          |  0.14 |
+        | Swedish krona   | sek          |  0.12 |
+        | US dollar       | usd          | 0.77  |
+        |-----------------+--------------+-------|
+
+        (org-lookup-first VAL S-LIST R-LIST &optional PREDICATE)
+
+        |  date | expense         |  sum | currency |   rate |  euros |
+        |-------+-----------------+------+----------+--------+--------|
+        |  1.3. | flights         |  324 | eur      |      1 |    324 |
+        |  4.6. | books and maps  |  243 | usd      |   0.77 | 187.11 |
+        | 30.7. | rental car      | 8300 | sek      |   0.12 |   996. |
+        |  2.7. | hotel           | 1150 | sek      |   0.12 |   138. |
+        |  2.7. | lunch           |  190 | sek      |   0.12 |   22.8 |
+        |  3.7. | fishing license | 1400 | nok      |   0.14 |   196. |
+        |  3.7. | gasoline        |  340 |          | #ERROR | #ERROR |
+        ,#+TBLFM: $5='(org-lookup-first $4 '(remote(rates,@2$2..@>$2)) \\
+        '(remote(rates, @2$3..@>$3)))::$6=$5*$3
+
+        &optional PREDICATE 的使用
+        提供一个VAL 和 S-LIST 的比较值
+
+        ,#+TBLNAME: grade-boundaries
+        | lower bound | grade |
+        |-------------+-------|
+        |           0 | F     |
+        |          10 | D     |
+        |          20 | C     |
+        |          30 | B     |
+        |          40 | A     |
+
+        (org-lookup-last VAL S-LIST R-LIST &optional PREDICATE)
+
+        | student | marks | grade |
+        |---------+-------+-------|
+        | X       |    30 | B     |
+        | Y       |    29 | C     |
+        | Z       |     5 | F     |
+        | W       |    55 | A     |
+        ,#+TBLFM: $3='(org-lookup-last $2 '(remote(grade-boundaries, @2$1..@>$1)) \\
+        '(remote(grade-boundaries, @2$2..@>$2)) '>=);L
+
+      #+END_SRC
+      
+*** Editing and Debugging Formulas (编辑和调试公式)
+    - C-c = or C-u C-c = (org-table-eval-formula)
+      在一个minibuffer中编辑指定单元格的计算公式
+    - C-u C-u C-c = (org-table-eval-formula)
+      重新插入当前单元格的计算结构
+    - C-c ? (org-table-field-info)
+      定位当前单元格的坐标信息
+    - C-c }
+      在表格中显示每个单元格的坐标信息
+    - C-c {
+      打开formula 的调试
+    - C-c ' (org-table-edit-formulas)
+      在一个特殊的buffer中编辑当前表的所有公式
+    
+*** Updating the table (更新表)
+    表格的公式改动不会自动重新进行计算， 需要通过指定的命令进行激活。
+    - C-c * (org-table-recalculate)
+      重新计算当前光标所在位置的行
+    - C-u C-c *
+    - C-u C-c C-c
+      重新计算整个表格
+    - C-u C-u C-c * or C-u C-u C-c C-c (org-table-iterate)
+      迭代计算表格，主要在有表格依赖的情况下使用
+    - M-x org-table-recalculate-buffer-tables RET
+      重新计算在当前缓冲区中的所有表
+    - M-x org-table-iterate-buffer-tables RET
+      迭代当前缓冲区中的所有表，解决一些表格的依赖关系
+      
+*** Advanced Features (高级功能)
+    如果想要自动计算表格内容，或者对字段和列指定一个数值，需要在第一列指定特殊的字符声明 \\
+    通过‘ ’，‘#’，‘*’， ‘!’， ‘$’ 在第一列的单元格来声明。
+    #+BEGIN_SRC org
+
+      |---+---------+--------+--------+--------+-------+------|
+      |   | Student | Prob 1 | Prob 2 | Prob 3 | Total | Note |
+      |---+---------+--------+--------+--------+-------+------|
+      | ! |         |     P1 |     P2 |     P3 |   Tot |      |
+      | # | Maximum |     10 |     15 |     25 |    50 | 10.0 |
+      | ^ |         |     m1 |     m2 |     m3 |    mt |      |
+      |---+---------+--------+--------+--------+-------+------|
+      | # | Peter   |     10 |      8 |     23 |    41 |  8.2 |
+      | # | Sam     |      2 |      4 |      3 |     9 |  1.8 |
+      |---+---------+--------+--------+--------+-------+------|
+      |   | Average |        |        |        |  25.0 |      |
+      | ^ |         |        |        |        |    at |      |
+      | $ | max=50  |        |        |        |       |      |
+      |---+---------+--------+--------+--------+-------+------|
+      ,#+TBLFM: $6=vsum($P1..$P3)::$7=10*$Tot/$max;%.1f::$at=vmean(@-II..@-I);%.1f
+
+    #+END_SRC
+
+    - '!'
+      该值表示该行用于定义名称变量来代替坐标值，当使用公式计算的时候可以直接指定该字段的名称为坐标定位
+    - ‘^’
+      该行对应的单元格定义一个名称并将上一行单元格的值进行赋值，通过公式调用该名称将获得指定的值。 \\
+      如示例中，$m1 的值为10
+    - '-' 
+      同上，但是为该行的下一行值赋值
+    - '$' 
+      该行字段可以在单元格定义一个常量进行声明，例如$max=50
+    - ‘#’
+      该行字段当通过<TAB> or <RET> or S-<TAB>时，可以自动计算公式
+    - '*'
+      该字段表示不会自动计算，需要手动通过指令激活重新计算功能
+    - ' '
+      该行通过C-u C-c * 将不会进行重新计算，只有通过标记‘#’或‘*’才会进行计算
+    - '/'
+      不导出该行，通常用于定义列组
+      
+* Todo Hyperlinks
+  就像HTML， Org 提供文件内的链接、到外部文件的链接、连接网络文章，Email，等等的链接
+
+** Link Format
+   Org 支持纯链接的格式，可直接点击链接激活访问。 \\
+   Org 一般使用以下格式表示链接：
+   #+BEGIN_SRC org
+     [[link][description]]       or  [[link]]
+     第一个使用一个描述来显示链接，第二个将会直接显示链接的内容
+   #+END_SRC
+
+   - C-c C-l 在当前光标插入链接
+
+** Internal Links
+   如果一个连接看起来不像一个URL，那么它会被认为是当前文件中的一个内部链接。
+   #+BEGIN_SRC org
+     [[#my-custon-id]]
+     该链接将具有自定义ID的属性
+
+     [[My Target]]   or [[My Target][Find my target]]
+     该链接将会跳转到标示为<<My Target>> 的位置
+   #+END_SRC
+   
+** External Links
+   Org 使用外部链接的例子：
+   #+BEGIN_SRC org
+          http://www.astro.uva.nl/~dominik          web路径
+          file:/home/dominik/images/jupiter.jpg     文件的绝对路径
+          /home/dominik/images/jupiter.jpg          同上
+          file:papers/last.pdf                      文件的相对路径
+          file:projects.org                         其它的org文件
+          docview:papers/last.pdf::NNN              打开一个docview文件并转到NNN页
+          id:B7423F4D-2E8A-471B-8810-C40F074717E9   通过ID链接到标题
+          news:comp.emacs                           Usenet 链接
+          mailto:adent@galaxy.net                   Mail 链接
+          vm:folder                                 VM folder link
+          vm:folder#id                              VM message link
+          wl:folder#id                              WANDERLUST message link
+          mhe:folder#id                             MH-E message link
+          rmail:folder#id                           RMAIL message link
+          gnus:group#id                             Gnus article link
+          bbdb:R.*Stallman                          BBDB link (with regexp)
+          irc:/irc.com/#emacs/bob                   IRC link
+          info:org:External%20links                 Info node link (with encoded space)
+   #+END_SRC
+
+** Handing Links (链接的处理)
+
+   - C-c l  存储一个链接到当前位置，这是一个全局的命令，需要通过自己绑定按键(org-store-link)
+   - C-c C-l 插入一个新的链接，可以通过<up>/<down> 或 <alt-p>/<alt-n> 访问存储的链接 \\
+     当通过<C-u> 前缀命令调用该快捷键时，将会以当前文件的位置并根据指定的文件创建一个链接
+   - C-c C-l (光标在已存在的链接上) 编辑链接或描述的部分
+   - C-c C-o or mouse-1 or mouse-2 打开一个链接
+   - C-c & 调回到记录的位置，使用<C-c %> 来标记位置。
+
+** Targeted Links (定向链接)
+   文件的链接可以包含附加的信息来跳转到该文件内部的指定位置。 \\
+   使用方法是双冒号后添加行号或搜索项
+   #+BEGIN_SRC org
+     [[file:~/code/main.c::255]]                 Find line 255
+     [[file:~/xx.org::My Target]]                Find ‘<<My Target>>’
+     [[file:~/xx.org::#my-custom-id]]            Find entry with custom id
+     [[file:~/xx.org::/regexp/]]                 使用正则表达式查找
+
+   #+END_SRC
+
+\newpage
+
+* 'TODO Items
+  Org 模式不需要TODO 列表在一个单独的文件中。 \\
+  TODO列表其实也是笔记文件的一部分，它能够有效的帮助你处理安排工作任务。
+  
+** Using TODO States
+   
+   任何标题在开头加’TODO‘ 都会变成TODO项，例如：
+   #+BEGIN_SRC org
+     ,*** TODO Write letter to Sam Fortune
+   #+END_SRC
+   TODO状态触发的标签还可以更改。变量为'org-todo-state-tags-triggers'
+
+   - C-c C-t 切换TODO项的状态
+     
+     #+BEGIN_SRC ditaa :file orgmode-todo.png :cmdline -r
+                  +-> TODO --> DONE --> (unmarked) --+
+                  |                                  |
+                  +----------------------------------+
+     #+END_SRC
+     
+   - S-<right>/<left> 切换TODO项的状态
+   - C-c / t 稀树TODO 项的显示，折叠缓冲区
+   - C-c a t 显示全局的TODO列表
+   - S-M-<RET> 插入一个新的TODO条目
+
+** Multi-state Workflows (多状态工作流)
+   你可以使用TODO 关键字去指定工作状态
+   #+BEGIN_SRC emacs-lisp
+     (setq org-todo-keywords
+           '((sequence "TODO" "FEEDBACK" "VERIFY" "|" "DONE" "DELEGATED")))   
+   #+END_SRC
+   '|' 为状态的分割条；如果不提供分割条，则最后一个状态会认为是DONE状态。 \\
+   上面示例通过C-c C-t 循环切换状态从‘TODO’到‘FEEDBACK’，然后到‘VERIFY’、 \\
+   最后是‘DONE’和‘DELEGATED’；如果需要基于‘TODO’/‘DONE’状态，还有一个bug修复工作流
+   #+BEGIN_SRC emacs-lisp
+     (setq org-todo-keywords
+           '((sequence "TODO(t)" "|" "DONE(d)")
+             (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")))   
+   #+END_SRC
+   关键字应该不相同，这样有助于Org有效的跟踪子序列应该切换的条目。 \\
+   如果需要在单个文件定义TODO 关键字，则可以通过以下的方式来添加头信息
+   #+BEGIN_SRC org
+     ,#+TODO: TODO(t) | DONE(d)
+     ,#+TODO: REPORT(r) BUG(b) KNOWNCAUSE(k) | FIXED(f)
+     ,#+TODO: | CANCELED(c)
+   #+END_SRC
+
+** Progress Logging
+** Priorities
+** Breaking Down Tasks
+** Checkboxes
+
+* Tags
+** Tag inheritance
+** Setting tags
+** Tag groups
+** Tag searches
+
+* TODO Properties
+* TODO Dates and Times
+** Timestamps
+** Creating Timestamps
+** Deadlines and scheduling
+** Clocking work time
+
+* TODO Capture-Refile-Archive
+** Capture
+** Refile and copy
+** Archiving
+
+* TODO Agenda Views
+** Agenda files
+** Agenda dispatcher
+** Built-in agenda views
+** Agenda commands
+** Custom agenda views
+
+* TODO Markup
+** Structural Markup Elements
+** Images and tables
+** Literal examples
+** Include files
+** Embedded LaTex
+
+* TODO Exporting
+** Export options
+** The export dispatcher 
+** ASCII/Latin-1/UTF-8 export
+** HTML export
+** LaTex and PDF
+** iCalendar export
+
+* TODO Publishing
+
+* TODO Source code
+
+* TODO Miscellaneous
+** Completion
+** Clean view
+** MobileOrg
