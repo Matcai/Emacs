@@ -29,7 +29,9 @@
 					   evil
 					   smex
 					   smartparens
+					   web-mode
 					   emmet-mode
+					   js2-mode
 					   exec-path-from-shell
 					   2048-game
 					   ox-latex-chinese
