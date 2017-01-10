@@ -32,8 +32,12 @@
 
 ;; html-mode 开启emmet-mode
 (add-hook 'web-mode-hook 'emmet-mode)
+(add-hook 'web-mode-hook 'smartparens-mode)
+(add-hook 'js2-mode-hook 'smartparens-mode)
 
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.js?\\'" . js2-mode))
+
 
 ;; 配置company 弹出补全延迟时间
 (setq company-idle-delay 0.1)
