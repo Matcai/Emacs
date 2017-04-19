@@ -70,5 +70,5 @@
 (setq sr-speedbar-right-side nil)
 ;;
 (setq sr-speedbar-width 20)
-
+(setq speedbar-show-unknown-files t)
 (provide 'at-setting)
