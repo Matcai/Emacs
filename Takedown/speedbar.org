@@ -1,0 +1,23 @@
+* Speedbar 文件树管理相关配置方法
+
+
+speedbar 是emacs自带的一个文件树管理插件，通过M-x speedbar 可以看到效果，默认使用一个单独的窗口分配显示。
+可以通过修改配置使用内嵌，但是有点不顺手的地方就是如果将当前的打开的文件全部关闭后，speedbar将会独占整个
+emacs的窗口。
+
+* 解决办法
+  - 安装sr-speedbar包
+  - 开启窗口内嵌
+    #+BEGIN_SRC elisp
+      (require 'sr-speedbar)    ;; 加载sr-speedbar
+      (add-hook 'after-init-hook '(lambda () (sr-speedbar-toggle))) 显示sr-speedbar侧边栏
+      (setq sr-speedbar-width 20) ;; 配置sr-speedbar 宽度
+      (setq sr-speedbar-right-side nil) ;; sr-speedbar显示在emacs左边
+    #+END_SRC
+  - speedbar 显示未知文件
+    #+BEGIN_SRC elisp
+      (setq speedbar-show-unknown-files t)    
+    #+END_SRC
+
+    
+    
