@@ -20,6 +20,7 @@
 
 (require 'at-setting)
 (require 'at-keybinding)
+(require 'sr-speedbar)
 
 ;;(require 'cl)
 ;; 加入cl （common lisp） 语法的兼容包

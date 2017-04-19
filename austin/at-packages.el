@@ -35,6 +35,7 @@
 					   exec-path-from-shell
 					   2048-game
 					   ox-latex-chinese
+					   sr-speedbar
 					   ) "Default packages installed")
 
 ;; 定义需要安装的软件包
