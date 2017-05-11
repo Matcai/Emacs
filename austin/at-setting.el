@@ -34,6 +34,7 @@
 (add-hook 'web-mode-hook 'emmet-mode)
 (add-hook 'web-mode-hook 'smartparens-mode)
 (add-hook 'js2-mode-hook 'smartparens-mode)
+(add-hook 'sh-mode-hook 'smartparens-mode)
 
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.js?\\'" . js2-mode))
