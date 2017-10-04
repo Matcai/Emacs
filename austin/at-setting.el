@@ -38,7 +38,7 @@
 
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.js?\\'" . js2-mode))
-(add-hook 'after-init-hook '(lambda () (sr-speedbar-toggle)))
+
 
 ;; 配置company 弹出补全延迟时间
 (setq company-idle-delay 0.1)
@@ -67,9 +67,5 @@
 ;; org-mode 执行源代码不需要提示确认
 (setq org-confirm-babel-evaluate nil)
 
-;; 侧边栏文件管理配置在左边
-(setq sr-speedbar-right-side nil)
-;;
-(setq sr-speedbar-width 20)
-(setq speedbar-show-unknown-files t)
+
 (provide 'at-setting)
