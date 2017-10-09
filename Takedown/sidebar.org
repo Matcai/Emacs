@@ -1,0 +1,28 @@
+
+* [ ] Speedbar 文件树管理相关配置方法
+
+
+speedbar 是emacs自带的一个文件树管理插件，通过M-x speedbar 可以看到效果，默认使用一个单独的窗口分配显示。
+可以通过修改配置使用内嵌，但是有点不顺手的地方就是如果将当前的打开的文件全部关闭后，speedbar将会独占整个
+emacs的窗口。
+
+* 解决办法
+  - 安装sr-speedbar包
+  - 开启窗口内嵌
+    #+BEGIN_SRC elisp
+      (require 'sr-speedbar)    ;; 加载sr-speedbar
+      (add-hook 'after-init-hook '(lambda () (sr-speedbar-toggle))) 显示sr-speedbar侧边栏
+      (setq sr-speedbar-width 20) ;; 配置sr-speedbar 宽度
+      (setq sr-speedbar-right-side nil) ;; sr-speedbar显示在emacs左边
+    #+END_SRC
+  - speedbar 显示未知文件
+    #+BEGIN_SRC elisp
+      (setq speedbar-show-unknown-files t)    
+    #+END_SRC
+
+    
+
+* [x] neotree 文件树管理相关配置方法
+  neotree 提供emacs文件导航树，类似vim中的nerdtree。Neotree与Speedbar对比让我决定使用的一个重要因素是：speedbar被识别成了一个窗口存在，当使用C-x 0 关闭其它窗口的时候它就占满了EMACS的屏幕。
+  使用起来非常不方便。而neotree当我试图关闭唯一一个工作窗口时候，它提示我无法关闭，因为它是唯一的一个窗口，也就是说neotree这个导航树功能是独立存在的。不受其它窗口的关闭影响
+  
