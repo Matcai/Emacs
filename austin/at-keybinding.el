@@ -16,7 +16,7 @@
 (global-set-key (kbd "M-x") 'smex)
 
 ;; 绑定一个快捷键F2 快速调用初始化的配置文件
-(global-set-key (kbd "<f2>") 'open-my-init-file)			
+(global-set-key (kbd "<f2>") 'neotree-toggle)
 
 (define-key global-map (kbd "C-x <tab>") 'indent-region-or-buffer)
 
