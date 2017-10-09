@@ -33,18 +33,3 @@
 
 ;; (setq exec-path (append exec-path '("/usr/local/texlive/2016/bin/x86_64-darwin")))
 ;; (add-to-list 'exec-path "/usr/local/texlive/2016/bin/x86_64-darwin/" t)
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (js2-highlight-vars js2-mode company monokai-theme hungry-delete markdown-mode markdown-mode+ switch-window yasnippet evil smex smartparens emmet-mode exec-path-from-shell 2048-game ox-latex-chinese))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
