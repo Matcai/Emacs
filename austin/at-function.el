@@ -53,6 +53,22 @@
 	(set-face-attribute (quote default) nil :height 130)
 	)
   )
+;; 添加company支持补全python函数
+(defun austin/python-mode-hook()
+  (add-to-list 'company-backends 'company-jedi))
 
+;; 添加函数用于添加hook到指定模式，hookname指对应的模式的hook变量，例如python-mode-hook
+
+;; (defvar austin/add-smartparens-mode-hook-list)
+;; (defcustom austin/add-smartparens-mode-hook-list
+;;   :group 'austin
+;;   :type 'string
+;;   )
+
+(defun austin/add-smartparens-mode-hook (hook-list)
+  (interactive)
+  (if (not (listp hook-list)) (return nil))
+  (dolist (h hook-list)
+    (add-hook h 'smartparens-mode)))
 
 (provide 'at-function)
