@@ -24,7 +24,16 @@
 							 '((sh . t)
 							   (ditaa . t)
 							   ))))
-(add-hook 'emacs-lisp-mode-hook 'smartparens-mode)
+
+;; 批量添加smarparens-mode到对应的hook，原理：(add-hook 'hook 'smartparens-mode)
+(austin/add-smartparens-mode-hook '(
+				    python-mode-hook
+				    web-mode-hook
+				    emacs-lisp-mode-hook
+				    js2-mode-hook
+				    sh-mode-hook
+				    ))
+
 ;; 添加模式在编辑lisp 的时候成对高亮括号
 (add-hook 'emacs-lisp-mode-hook 'show-paren-mode)
 ;; (add-to-list 'python-shell-completion-native-disabled-interpreters "python3")
@@ -32,9 +41,7 @@
 
 ;; html-mode 开启emmet-mode
 (add-hook 'web-mode-hook 'emmet-mode)
-(add-hook 'web-mode-hook 'smartparens-mode)
-(add-hook 'js2-mode-hook 'smartparens-mode)
-(add-hook 'sh-mode-hook 'smartparens-mode)
+
 
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.js?\\'" . js2-mode))
@@ -67,5 +74,17 @@
 ;; org-mode 执行源代码不需要提示确认
 (setq org-confirm-babel-evaluate nil)
 
+;; 针对python编程环境添加company-jedi, flycheck语法检查以及pep8规范支持
+(add-hook 'python-mode-hook 'austin/python-mode-hook)
+(add-hook 'python-mode-hook 'flycheck-mode)
+(add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
+
+;; 配置代理
+;; (setq url-proxy-services
+;;       '(("http" . "127.0.0.1:1087")
+;;  	("https" . "127.0.0.1:1087")))
+
+;; (setq jedi:install-server--command
+;;       `("pip" "--proxy=127.0.0.1:1087" "install" "--upgrade" ,(convert-standard-filename jedi:source-dir)))
 
 (provide 'at-setting)
