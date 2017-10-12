@@ -35,6 +35,10 @@
 					   exec-path-from-shell
 					   ox-latex-chinese
 					   neotree
+					   company-jedi
+					   virtualenv
+					   flycheck
+					   py-autopep8
 					   ) "Default packages installed")
 
 ;; 定义需要安装的软件包
@@ -53,8 +57,6 @@
   (dolist (pkg jon/packages)
     (when (not (package-installed-p pkg))
       (package-install pkg))))
-
-
 
 
 (provide 'at-packages)
