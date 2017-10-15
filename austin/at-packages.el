@@ -36,6 +36,8 @@
 					   ox-latex-chinese
 					   neotree
 					   company-jedi
+					   company-go
+					   go
 					   virtualenv
 					   flycheck
 					   py-autopep8
