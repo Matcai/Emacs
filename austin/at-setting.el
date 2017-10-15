@@ -32,6 +32,7 @@
 				    emacs-lisp-mode-hook
 				    js2-mode-hook
 				    sh-mode-hook
+				    go-mode-hook
 				    ))
 
 ;; 添加模式在编辑lisp 的时候成对高亮括号
@@ -86,5 +87,16 @@
 
 ;; (setq jedi:install-server--command
 ;;       `("pip" "--proxy=127.0.0.1:1087" "install" "--upgrade" ,(convert-standard-filename jedi:source-dir)))
+
+
+;; 添加golang对应company自动补全支持
+;; 1. export GOPATH=$HOME/goprojects   声明go个人工作路径的全局变量，company-go是通过gocode自动补全守护程序实现的。
+;; 2. export PATH=$PATH:$GOPATH/bin  该变量在后续下载gocode补全程序对应的位置，用于自动补全功能
+;; 3. go get -u https://github.com/nsf/gocode 下载gocode
+;; 默认情况下company-mode 会自动加载每个backend， 如果发现没有补全生效则添加下面代码支持
+ (add-hook 'go-mode-hook (lambda ()
+  			  (set (make-local-variable 'company-backends) '(company-go))
+  			  (company-mode)
+  			  ))
 
 (provide 'at-setting)
