@@ -37,11 +37,25 @@
 ;;(require 'cl)
 ;; 加入cl （common lisp） 语法的兼容包
 
-;;(load-theme (quote monokai) t)
-(load-theme (quote misterioso) t)
+(load-theme (quote monokai) t)
+;;(load-theme (quote misterioso) t)
 
 ;;(require 'ox-latex-chinese)
 ;;(oxlc/toggle-ox-latex-chinese t)
 
 ;; (setq exec-path (append exec-path '("/usr/local/texlive/2016/bin/x86_64-darwin")))
 ;; (add-to-list 'exec-path "/usr/local/texlive/2016/bin/x86_64-darwin/" t)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (flycheck-xcode helm-xcdoc xcode-mode company monokai-theme hungry-delete markdown-mode markdown-mode+ switch-window yasnippet evil smex smartparens web-mode emmet-mode js2-mode exec-path-from-shell ox-latex-chinese neotree company-jedi company-go go virtualenv flycheck py-autopep8 company-c-headers))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
