@@ -41,6 +41,7 @@
 					   virtualenv
 					   flycheck
 					   py-autopep8
+					   company-c-headers
 					   ) "Default packages installed")
 
 ;; 定义需要安装的软件包
