@@ -33,6 +33,8 @@
 				    js2-mode-hook
 				    sh-mode-hook
 				    go-mode-hook
+				    c++-mode-hook
+				    c-mode-hook
 				    ))
 
 ;; 添加模式在编辑lisp 的时候成对高亮括号
@@ -70,8 +72,12 @@
 (setq auto-save-interval 100)
 
 ;; 配置Python3环境
-(setq python-shell-interpreter "python3")
-(setq python-shell-completion-native-disabled-interpreters '("python3"))
+;; (setq python-shell-interpreter "python3")
+;; (setq python-shell-completion-native-disabled-interpreters '("python3"))
+
+;; 配置Python2环境
+(setq python-shell-interpreter "python")
+(setq python-shell-completion-native-disabled-interpreters '("python"))
 ;; org-mode 执行源代码不需要提示确认
 (setq org-confirm-babel-evaluate nil)
 
