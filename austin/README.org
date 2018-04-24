@@ -1,0 +1,29 @@
+* Emacs 配置文件使用说明
+
+** 系统额外安装插件以及配置方法
+   1. Python2/Python3 补全需要系统安装额外插件以支持flycheck插件语法检查。
+      #+BEGIN_SRC shell
+        # python2 安装插件
+        pip2 install pyflakes flake8 pep8
+
+        # python3 安装插件
+        pip3 install pyflakes flake8 pep8
+      #+END_SRC
+      #+BEGIN_SRC lisp
+        ;; 配置Python3环境
+        (setq python-shell-interpreter "python3")
+        (setq python-shell-completion-native-disabled-interpreters '("python3"))
+      #+END_SRC
+      
+
+   2. Python2/Python3 语法提示插件安装: jedi
+      #+BEGIN_SRC shell
+        # python2
+        pip2 install jedi
+
+        # python3
+        pip3 install jedi
+      #+END_SRC
+      
+
+** 
