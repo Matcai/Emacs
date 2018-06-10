@@ -52,7 +52,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (flycheck-xcode helm-xcdoc xcode-mode company monokai-theme hungry-delete markdown-mode markdown-mode+ switch-window yasnippet evil smex smartparens web-mode emmet-mode js2-mode exec-path-from-shell ox-latex-chinese neotree company-jedi company-go go virtualenv flycheck py-autopep8 company-c-headers))))
+    (org2ctex flycheck-xcode helm-xcdoc xcode-mode company monokai-theme hungry-delete markdown-mode markdown-mode+ switch-window yasnippet evil smex smartparens web-mode emmet-mode js2-mode exec-path-from-shell ox-latex-chinese neotree company-jedi company-go go virtualenv flycheck py-autopep8 company-c-headers))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -44,7 +44,7 @@
 ;; 如果系统是mac，则设置窗口大小120x50；如果不是则全屏
 (if (string= system-type "darwin")
 	(progn
-	  (setq initial-frame-alist '((top . 50) (left . 480) (width . 130) (height . 50)))
+	  (setq initial-frame-alist '((top . 30) (left . 50) (width . 130) (height . 50)))
 	  (set-face-attribute (quote default) nil :height 135)
 	  (setenv "PATH" (concat (getenv "PATH") ":/usr/local/texlive/2016/bin/x86_64-darwin"))
 	  (setq org-ditaa-jar-path "/opt/local/share/java/ditaa0_9.jar"))
