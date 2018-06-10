@@ -67,7 +67,7 @@
 
 (setq make-backup-files nil)
 (setq tab-width 4)
-
+(setq-default indent-tabs-mode nil)
 ;; 配置自动保存的时间戳
 (setq auto-save-interval 100)
 
