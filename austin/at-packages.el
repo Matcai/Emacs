@@ -33,7 +33,8 @@
 					   emmet-mode
 					   js2-mode
 					   exec-path-from-shell
-					   ox-latex-chinese
+					   ;; ox-latex-chinese
+					   org2ctex
 					   neotree
 					   company-jedi
 					   company-go
