@@ -26,4 +26,9 @@
       #+END_SRC
       
 
-** 
+** neotree 安装图标方法
+   1. 安装包 all-the-icons
+   2. 执行图标字体安装
+      #+BEGIN_SRC lisp
+        M-x all-the-icons-install-fonts
+      #+END_SRC
