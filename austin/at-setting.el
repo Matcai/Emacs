@@ -5,12 +5,13 @@
 ;;				      /_/   \_\__,_|___/\__|_|_| |_|
 
 
-(smex-initialize)
+
 
 (global-hungry-delete-mode t)								;; 全局开启删除模式
 (delete-selection-mode t)
 (global-company-mode t)
 (global-hl-line-mode t)
+
 (global-linum-mode t)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
@@ -35,10 +36,14 @@
 				    go-mode-hook
 				    c++-mode-hook
 				    c-mode-hook
+                                    json-mode-hook
+                                    vue-mode-hook
+                                    css-mode-hook
 				    ))
 
 ;; 添加模式在编辑lisp 的时候成对高亮括号
 (add-hook 'emacs-lisp-mode-hook 'show-paren-mode)
+
 ;; (add-to-list 'python-shell-completion-native-disabled-interpreters "python3")
 ;; (add-hook 'org-mode-hook (lambda () (setq truncate-lines nil)))
 
@@ -57,7 +62,11 @@
 (setq company-minimum-prefix-length 2)
 
 ;; 配置光标的类型
-(setq cursor-type (quote bar))
+;; (setq cursor-type (quote (bar . 2)))
+
+
+
+
 
 ;; 配置buffer文件系统编码
 (setq default-buffer-file-coding-system (quote utf-8))
@@ -100,9 +109,28 @@
 ;; 2. export PATH=$PATH:$GOPATH/bin  该变量在后续下载gocode补全程序对应的位置，用于自动补全功能
 ;; 3. go get -u https://github.com/nsf/gocode 下载gocode
 ;; 默认情况下company-mode 会自动加载每个backend， 如果发现没有补全生效则添加下面代码支持
- (add-hook 'go-mode-hook (lambda ()
+(add-hook 'go-mode-hook (lambda ()
   			  (set (make-local-variable 'company-backends) '(company-go))
   			  (company-mode)
   			  ))
+;; helm-projectile setting
+(projectile-global-mode)
+(setq projectile-completion-system 'helm)
+(helm-projectile-on)
 
+;; ------------------------------------ all-the-icons setting ----------------------------------
+
+(setq inhibit-compacting-font-caches t)
+(setq neo-theme 'icons)
+;; (all-the-icons-icon-for-buffer)
+
+
+
+
+;; ---------------------------------------------------------------------------------------------
+
+;;(powerline-default-theme)
+(spaceline-all-the-icons-theme)
+(spaceline-all-the-icons--setup-package-updates)
+(spaceline-all-the-icons--setup-neotree)
 (provide 'at-setting)
