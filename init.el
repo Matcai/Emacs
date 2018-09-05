@@ -7,18 +7,6 @@
 (package-initialize)
 (add-to-list 'load-path "~/.emacs.d/austin/" t)
 
-;; (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
-
-;; (unless (require 'el-get nil 'noerror)
-;;   (with-current-buffer
-;;       (url-retrieve-synchronously
-;;        "https://raw.githubusercontent.com/dimitri/el-get/master/el-get-install.el")
-;;     (goto-char (point-max))
-;;     (eval-print-last-sexp)))
-;;  
-;; (add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
-;; (el-get 'sync)
-
 (require 'at-packages)
 (require 'at-latex)
 (require 'at-function)										;; 自定义的函数
@@ -27,7 +15,7 @@
 (require (quote evil))										
 (require 'smartparens-config)
 (require 'hungry-delete)
-(require 'smex)
+
 (require 'company)
 
 (require 'at-setting)
@@ -37,9 +25,11 @@
 ;;(require 'cl)
 ;; 加入cl （common lisp） 语法的兼容包
 
-(load-theme (quote monokai) t)
-;;(load-theme (quote misterioso) t)
+;; (load-theme (quote monokai) t)
 
+(load-theme (quote material) t)
+;;(load-theme (quote misterioso) t)
+;; (load-theme (quote seti) t)
 ;;(require 'ox-latex-chinese)
 ;;(oxlc/toggle-ox-latex-chinese t)
 
@@ -50,12 +40,14 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(cursor-type (quote (bar . 2)))
  '(package-selected-packages
    (quote
-    (org2ctex flycheck-xcode helm-xcdoc xcode-mode company monokai-theme hungry-delete markdown-mode markdown-mode+ switch-window yasnippet evil smex smartparens web-mode emmet-mode js2-mode exec-path-from-shell ox-latex-chinese neotree company-jedi company-go go virtualenv flycheck py-autopep8 company-c-headers))))
+    (package+ seti-theme edit-indirect ssass-mode vue-html-mode virtualenv go org2ctex company)))
+ '(virtualenv-root "~/Virtualenv/"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(cursor ((t (:background "green1")))))
