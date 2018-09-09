@@ -12,7 +12,7 @@
 (global-company-mode t)
 (global-hl-line-mode t)
 
-(global-linum-mode t)
+(global-display-line-numbers-mode t)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 ;; 关闭工具栏
@@ -20,11 +20,11 @@
 (yas-global-mode t)
 
 (add-hook 'org-mode-hook '(lambda()
-							(org-babel-do-load-languages
-							 'org-babel-load-languages
-							 '((sh . t)
-							   (ditaa . t)
-							   ))))
+			    (org-babel-do-load-languages
+			     'org-babel-load-languages
+			     '((sh . t)
+			       (ditaa . t)
+			       ))))
 
 ;; 批量添加smarparens-mode到对应的hook，原理：(add-hook 'hook 'smartparens-mode)
 (austin/add-smartparens-mode-hook '(
@@ -109,14 +109,26 @@
 ;; 2. export PATH=$PATH:$GOPATH/bin  该变量在后续下载gocode补全程序对应的位置，用于自动补全功能
 ;; 3. go get -u https://github.com/nsf/gocode 下载gocode
 ;; 默认情况下company-mode 会自动加载每个backend， 如果发现没有补全生效则添加下面代码支持
-(add-hook 'go-mode-hook (lambda ()
-  			  (set (make-local-variable 'company-backends) '(company-go))
-  			  (company-mode)
-  			  ))
+(require 'go-mode)
+(use-package company-go
+  :after go-mode
+  :config (add-to-list 'company-backends 'company-go))
+
+;; (add-hook 'go-mode-hook (lambda ()
+;;   			  (set (make-local-variable 'company-backends) '(company-go))
+;;   			  (company-mode)
+;;   			  ))
+(require 'dash)
+(use-package company-shell
+  :requires (dash)
+  :config (add-to-list 'company-backends 'company-shell))
+
+;; (add-to-list 'company-backends '(
+;;                                  company-shell))
 ;; helm-projectile setting
 (projectile-global-mode)
-(setq projectile-completion-system 'helm)
-(helm-projectile-on)
+;;(setq projectile-completion-system 'helm)
+;;(helm-projectile-on)
 
 ;; ------------------------------------ all-the-icons setting ----------------------------------
 
@@ -125,12 +137,41 @@
 ;; (all-the-icons-icon-for-buffer)
 
 
+;; ------------------------------------ powerline setting --------------------------------------
+;; (powerline-default-theme)
 
 
-;; ---------------------------------------------------------------------------------------------
+;; ------------------------------------ spaceline setting --------------------------------------
+;; (spaceline-emacs-theme)
+;; (spaceline-helm-mode)
+;; (spaceline-info-mode)
+;; spaceline 状态栏美化工具
+(use-package spaceline
+  :config (progn
+            (spaceline-emacs-theme)
+            (spaceline-helm-mode)
+            (spaceline-info-mode)))
 
-;;(powerline-default-theme)
-(spaceline-all-the-icons-theme)
-(spaceline-all-the-icons--setup-package-updates)
-(spaceline-all-the-icons--setup-neotree)
+
+
+(use-package spaceline-all-the-icons
+  :after spaceline
+  :config (spaceline-all-the-icons-theme))
+
+
+;; (unless window-system
+;;   (add-hook 'linum-before-numbering-hook
+;;             (lambda ()
+;;               (setq-local linum-format-fmt
+;;                           (let ((w (length (number-to-string
+;;                                             (count-lines (point-min) (point-max))))))
+;;                             (concat "%" (number-to-string w) "d "))))))
+
+;; (defun linum-format-func (line)
+;;   (concat
+;;    (propertize (format linum-format-fmt line) 'face 'linum)
+;;    (propertize " " 'face 'mode-line)))
+
+;; (unless window-system (setq linum-format 'linum-format-func))
+
 (provide 'at-setting)
