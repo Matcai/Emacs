@@ -1,12 +1,9 @@
-# 一个 Emacs 的学习资料
+# 我的Emacs配置文件
 
-##### 世上有两大神器，一个名为vim、一个名为Emacs !
+## 使用
 
-###### 听说vim 和 Emacs 都有一个特点。
-
-- vim 的使用Esc到死。。。。
-- Emacs 的使用Ctrl到死。。。。
-
-> 传言不可不信，不可全信，让我来试试。
+```shell
+git clone https://github.com/matcai/emacs.git ~/.emacs.d/
+```
 
 
