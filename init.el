@@ -6,6 +6,7 @@
 ;; You may delete these explanatory comments.
 (package-initialize)
 (add-to-list 'load-path "~/.emacs.d/austin/" t)
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 (require 'at-packages)
 (require 'at-latex)
@@ -35,19 +36,3 @@
 
 ;; (setq exec-path (append exec-path '("/usr/local/texlive/2016/bin/x86_64-darwin")))
 ;; (add-to-list 'exec-path "/usr/local/texlive/2016/bin/x86_64-darwin/" t)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(cursor-type (quote (bar . 2)))
- '(package-selected-packages
-   (quote
-    (package+ seti-theme edit-indirect ssass-mode vue-html-mode virtualenv go org2ctex company)))
- '(virtualenv-root "~/Virtualenv/"))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(cursor ((t (:background "green1")))))
