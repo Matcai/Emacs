@@ -20,43 +20,47 @@
 (require 'cl)
 
 (defvar jon/packages '(
-					   company
-					   monokai-theme
-					   hungry-delete
-					   markdown-mode
-					   markdown-mode+
-					   switch-window
-					   yasnippet
-					   evil
-					   ;; smex
-                                           helm
-                                           helm-directory
-                                           helm-projectile
-                                           all-the-icons
-                                           spaceline-all-the-icons
-					   smartparens
-					   web-mode
-					   emmet-mode
-					   js2-mode
-					   exec-path-from-shell
-					   ;; ox-latex-chinese
-					   org2ctex
-                                           powerline
-					   neotree
-					   company-jedi
-					   company-go
-					   go
-                                           json-mode
-					   virtualenv
-					   flycheck
-					   py-autopep8
-					   company-c-headers
-                                           htmlize
-                                           vue-mode
-                                           seti-theme
-                                           material-theme
-                                           ;; tern ;; javascrit 代码分析方法提示补全
-					   ) "Default packages installed")
+                       use-package      ; package引入工具，同require函数，功能比require强大
+		       company
+		       monokai-theme
+		       hungry-delete
+		       markdown-mode
+		       markdown-mode+
+		       switch-window
+		       yasnippet
+		       evil
+		       ;; smex
+                       helm
+                       helm-directory   ; helm文件目录搜索
+                       helm-projectile  ; helm文件项目管理
+                       all-the-icons    ; 文件图标美化
+                       spaceline-all-the-icons 
+		       smartparens      ; 符号自动配对
+		       web-mode
+		       emmet-mode
+		       js2-mode
+		       exec-path-from-shell
+		       ;; ox-latex-chinese
+		       org2ctex
+                       powerline
+                       spaceline        ; 状态栏美化工具， 同powerline
+		       neotree          ; 文件管理工具，可以快速浏览文件
+		       company-jedi
+		       company-go
+                       company-shell
+                       dash
+		       go
+                       json-mode
+		       virtualenv
+		       flycheck         ; 语法检查工具
+		       py-autopep8
+		       company-c-headers
+                       htmlize
+                       vue-mode
+                       seti-theme
+                       material-theme
+                       ;; tern ;; javascrit 代码分析方法提示补全
+		       ) "Default packages installed")
 
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 
@@ -80,7 +84,7 @@
 (add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
 ;; (el-get 'sync)
 ;; (el-get-elpa-build-local-recipes (expand-file-name "el-get/recipes/elpa" el-get-dir) t)
-(el-get 'sync)
+;; (el-get 'sync)
 (el-get 'sync jon/packages)
 
 ;; 定义需要安装的软件包
@@ -90,7 +94,6 @@
 ;; (defun jon/packages-installed-p ()
 ;;   (dolist (pkg jon/packages t)
 ;;     (if (not (package-installed-p pkg)) (return nil))))
-
 
 ;; ;; 如果软件包没有安装则自动安装。
 ;; (unless (jon/packages-installed-p)
