@@ -36,4 +36,12 @@
 (global-set-key (kbd "M-x") 'helm-M-x)
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
 
+;; ------------------------- search keybinding ----------------------
+;; 配置按键绑定，C-s 默认是用正则表达式方式进行搜索操作；C-r 使用正则表达式反向搜索
+(define-key global-map (kbd "C-s") 'isearch-forward-regexp)
+(define-key global-map (kbd "C-r") 'isearch-backward-regexp)
+;; (define-key global-map (kbd "C-M-s") 'isearch-forward)
+;; (define-key global-map (kbd "C-M-r") 'isearch-backward)
+(unbind-key "C-M-s" global-map)
+(unbind-key "C-M-r" global-map)
 (provide 'at-keybinding)
